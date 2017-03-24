@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace LightRisePlatformerEngine {
     class Map {
@@ -29,5 +31,25 @@ namespace LightRisePlatformerEngine {
             }
         }
 
+        public void Draw(SpriteBatch spriteBatch, Camera cam) {
+            for (UInt32
+                i = (UInt32)Math.Max(0, (Int32)Math.Floor(cam.Position.X)),
+                iTo = Math.Min(Width, (UInt32)Math.Ceiling(cam.Position.X + spriteBatch.GraphicsDevice.PresentationParameters.BackBufferWidth / cam.Scale.X));
+                i < iTo; i++) {
+                for (UInt32
+                    j = (UInt32)Math.Max(0, (Int32)Math.Floor(cam.Position.Y)),
+                    jTo = Math.Min(Height, (UInt32)Math.Ceiling(cam.Position.Y + spriteBatch.GraphicsDevice.PresentationParameters.BackBufferHeight / cam.Scale.Y));
+                    j < jTo; j++) {
+                    if (this[i, j] == Map.CellType.Wall) {
+                        spriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(
+                            (Int32)((i - cam.Position.X) * cam.Scale.X),
+                            (Int32)((j - cam.Position.Y) * cam.Scale.Y),
+                            (Int32)cam.Scale.X,
+                            (Int32)cam.Scale.Y), Color.Red);
+                    }
+                }
+            }
+
+        }
     }
 }

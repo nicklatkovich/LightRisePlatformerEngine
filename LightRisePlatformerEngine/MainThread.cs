@@ -104,23 +104,7 @@ namespace LightRisePlatformerEngine {
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographic(Cam.Scale.X, Cam.Scale.Y, -0.1f, 1f));
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographicOffCenter(new Rectangle((int)(Cam.Position.X - Cam.Scale.X / 2), (int)(Cam.Position.Y - Cam.Scale.Y / 2), (int)Cam.Scale.X, (int)Cam.Scale.Y), 1f, 1000f));
             SpriteBatch.Begin( );
-            for (UInt32
-                i = (UInt32)Math.Max(0, (Int32)Math.Floor(Cam.Position.X)),
-                iTo = Math.Min(Map.Width, (UInt32)Math.Ceiling(Cam.Position.X + Width / Cam.Scale.X));
-                i < iTo; i++) {
-                for (UInt32
-                    j = (UInt32)Math.Max(0, (Int32)Math.Floor(Cam.Position.Y)),
-                    jTo = Math.Min(Map.Height, (UInt32)Math.Ceiling(Cam.Position.Y + Height / Cam.Scale.Y));
-                    j < jTo; j++) {
-                    if (Map[i, j] == Map.CellType.Wall) {
-                        SpriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(
-                            (Int32)((i - Cam.Position.X) * Cam.Scale.X),
-                            (Int32)((j - Cam.Position.Y) * Cam.Scale.Y),
-                            (Int32)Cam.Scale.X,
-                            (Int32)Cam.Scale.Y), Color.Red);
-                    }
-                }
-            }
+            Map.Draw(SpriteBatch, Cam);
             SpriteBatch.End( );
 
             base.Draw(gameTime);
