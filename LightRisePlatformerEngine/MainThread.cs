@@ -44,7 +44,7 @@ namespace LightRisePlatformerEngine {
         protected override void Initialize( ) {
             // TODO: Add your initialization logic here
             Map = new Map(256, 256);
-            Cam = new Camera(new Vector2(0, 0), new Vector2(64f, 64f));
+            Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
 
             base.Initialize( );
         }

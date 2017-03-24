@@ -26,7 +26,10 @@ namespace LightRisePlatformerEngine {
             Grid = SimpleUtils.Create2DArray(Width, Height, CellType.Empty);
             for (UInt32 i = 0; i < Width; i++) {
                 for (UInt32 j = 0; j < Height; j++) {
-                    Grid[i][j] = SimpleUtils.Choose(new CellType[ ] { CellType.Empty, CellType.Wall });
+                    //Grid[i][j] = SimpleUtils.Choose(new CellType[ ] { CellType.Empty, CellType.Wall }); // 50:50
+                    Grid[i][j] = SimpleUtils.Choose(new Tuple<CellType, float>[ ] {
+                        new Tuple<CellType, float>(CellType.Empty, 9),
+                        new Tuple<CellType, float>(CellType.Wall, 1)});
                 }
             }
         }
@@ -40,7 +43,7 @@ namespace LightRisePlatformerEngine {
                     j = (UInt32)Math.Max(0, (Int32)Math.Floor(cam.Position.Y)),
                     jTo = Math.Min(Height, (UInt32)Math.Ceiling(cam.Position.Y + spriteBatch.GraphicsDevice.PresentationParameters.BackBufferHeight / cam.Scale.Y));
                     j < jTo; j++) {
-                    if (this[i, j] == Map.CellType.Wall) {
+                    if (this[i, j] == CellType.Wall) {
                         spriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(
                             (Int32)((i - cam.Position.X) * cam.Scale.X),
                             (Int32)((j - cam.Position.Y) * cam.Scale.Y),

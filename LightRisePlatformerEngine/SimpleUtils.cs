@@ -28,5 +28,23 @@ namespace LightRisePlatformerEngine {
             return variants[_rand.Next( ) % variants.Length];
         }
 
+        public static T Choose<T>(Tuple<T, float>[ ] variants) {
+            float max_probability = 0f;
+            foreach (var elem in variants) {
+                max_probability += elem.Item2;
+            }
+            float result = Random * max_probability;
+            float current_probability = 0f;
+            foreach (var elem in variants) {
+                current_probability += elem.Item2;
+                if (result < current_probability) {
+                    return elem.Item1;
+                }
+            }
+            throw new Exception("Check this function for logical errors");
+        }
+
+        public static float Random { get { return (float)_rand.NextDouble( ); } }
+
     }
 }
