@@ -91,7 +91,7 @@ namespace LightRise.Main {
                 Exit( );
 
             float cam_spd = 0.1f;
-            if (KeyboardState.IsKeyDown(Keys.R))
+            if (State.Keyboard.IsKeyDown(Keys.R))
             {
                 spineObj.Scale = 1.5f;
             }
