@@ -127,5 +127,26 @@ namespace LightRise.BaseClasses
             }
             return result;
         }
+
+        public static Map[][] ConvertFromBig(Map map, Point MapSize)
+        {
+            uint with = (uint)(map.Width / MapSize.X);
+            uint height = (uint)(map.Height / MapSize.Y);
+            Map[][] result = new Map[with][];
+            for (uint i = 0; i < with; i++)
+            {
+                result[i] = new Map[height];
+
+                for (uint j = 0; j < height; j++)
+                {
+                    Map buffer = new Map(MapSize);
+                    for (uint i1 = 0; i1 < MapSize.X; i1++)
+                        for (uint j1 = 0; j1 < MapSize.Y; j1++)
+                            buffer[i1, j1] = map[(uint)(i * MapSize.X + i1), (uint)(j * MapSize.Y + j1)];
+                    result[i][j] = buffer;
+                }
+            }
+            return result;
+        }
     }
 }
