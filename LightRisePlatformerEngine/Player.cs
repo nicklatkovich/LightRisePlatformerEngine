@@ -63,8 +63,7 @@ namespace LightRise.Main {
             GridPosition = position;
         }
 
-        public void SetHero(GraphicsDevice graphicDevice, float baseScale)
-        {
+        public void SetHero(GraphicsDevice graphicDevice, float baseScale) {
             hero = new SpineObject(graphicDevice, "Sample", baseScale, Position);
         }
 
@@ -76,10 +75,9 @@ namespace LightRise.Main {
         }
 
         public void Draw(SpriteBatch surface, Camera camera) {
-            if (hero == null)
-                surface.Draw(SimpleUtils.WhiteRect, new Rectangle(camera.WorldToWindow(Position.Add(0.5f) - new Vector2(WIDTH / 2f, VSize - 1.5f)), (new Vector2(WIDTH, VSize) * camera.Scale).ToPoint()), Color.Green);
-            else
-            {
+            if (hero == null) {
+                surface.Draw(SimpleUtils.WhiteRect, new Rectangle(camera.WorldToWindow(Position.Add(0.5f) - new Vector2(WIDTH / 2f, VSize - 1.5f)), (new Vector2(WIDTH, VSize) * camera.Scale).ToPoint( )), Color.Green);
+            } else {
                 hero.offset = new Vector2(camera.Scale.X / 2, camera.Scale.Y);
                 hero.Draw(camera);
             }

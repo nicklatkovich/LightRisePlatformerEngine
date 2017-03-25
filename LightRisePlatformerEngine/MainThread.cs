@@ -39,6 +39,7 @@ namespace LightRise.Main {
 
         public int Width { get { return Graphics.PreferredBackBufferWidth; } }
         public int Height { get { return Graphics.PreferredBackBufferHeight; } }
+        public Point Size { get { return new Point(Width, Height); } }
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -47,10 +48,10 @@ namespace LightRise.Main {
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize( ) {
-            Player.SetHero(GraphicsDevice, 0.1f);
             Tuple<Map, Point> tuple = WinUtils.LoadMap("Content/asd.lrmap");
             Map = tuple.Item1;
             Player = new Player(tuple.Item2);
+            Player.SetHero(GraphicsDevice, 0.1f);
             Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
             SimpleUtils.Init(GraphicsDevice);
             // TODO: Renders will be used for more fust drawing of the background... Later
@@ -94,18 +95,18 @@ namespace LightRise.Main {
                 Exit( );
 
             float cam_spd = 0.1f;
-            if (State.Keyboard.IsKeyDown(Keys.R))
-            {
+            if (State.Keyboard.IsKeyDown(Keys.R)) {
                 spineObj.Scale = 1.5f;
-            }
-            else
+            } else {
                 spineObj.Scale = 1;
+            }
             float dx = (State.Keyboard.IsKeyDown(Keys.Right) ? cam_spd : 0) - (State.Keyboard.IsKeyDown(Keys.Left) ? cam_spd : 0);
             float dy = (State.Keyboard.IsKeyDown(Keys.Down) ? cam_spd : 0) - (State.Keyboard.IsKeyDown(Keys.Up) ? cam_spd : 0);
             Cam.Position = new Vector2(Cam.Position.X + dx, Cam.Position.Y + dy);
             Player.hero.Update(gameTime);
 
             Player.Step(State);
+            Cam.Position = Player.Position - Size.ToVector2( ) / Cam.Scale / 2f;
 
             base.Update(gameTime);
         }
@@ -121,8 +122,8 @@ namespace LightRise.Main {
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographicOffCenter(new Rectangle((int)(Cam.Position.X - Cam.Scale.X / 2), (int)(Cam.Position.Y - Cam.Scale.Y / 2), (int)Cam.Scale.X, (int)Cam.Scale.Y), 1f, 1000f));
             SpriteBatch.Begin( );
             Map.Draw(SpriteBatch, Cam);
-            Player.Draw(SpriteBatch, Cam);
             SpriteBatch.End( );
+            Player.Draw(SpriteBatch, Cam);
             //spineObj.Draw(Cam);
 
             base.Draw(gameTime);
