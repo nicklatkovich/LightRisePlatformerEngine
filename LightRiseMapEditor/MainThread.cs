@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 using LightRise.BaseClasses;
 using System.Collections.Generic;
+using System;
 
 namespace LightRise.MapEditor {
     /// <summary>
@@ -11,13 +12,29 @@ namespace LightRise.MapEditor {
     /// </summary>
     public class MainThread : Game {
 
-        const uint MAP_WIDTH = 64;
-        const uint MAP_HEIGHT = 64;
+        public static readonly Point MAP_SIZE;
+        static MainThread( ) {
+
+            // ATTENSION: MAP_SIZE must be only positive
+            MAP_SIZE = new Point(64, 64);
+
+        }
 
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
 
-        Vector2 MousePosition;
+        private Vector2 _mousePosition;
+        public Vector2 MousePosition {
+            get { return _mousePosition; }
+            set {
+                if (value == null) {
+                    throw new NullReferenceException( );
+                }
+                MousePreviousPosition = _mousePosition;
+                _mousePosition = value;
+            }
+        }
+        public Vector2 MousePreviousPosition { get; private set; }
 
         Camera Cam;
 
@@ -40,7 +57,7 @@ namespace LightRise.MapEditor {
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize( ) {
-            Maps = SimpleUtils.Create2DArray(1, 1, new Map(MAP_WIDTH, MAP_HEIGHT));
+            Maps = SimpleUtils.Create2DArray(1, 1, new Map((uint)MAP_SIZE.X, (uint)MAP_SIZE.Y));
             Maps[0][0].Randomize( );
             Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
             SimpleUtils.Init(GraphicsDevice);
@@ -78,6 +95,8 @@ namespace LightRise.MapEditor {
 
             MouseState MouseState = Mouse.GetState( );
             MousePosition = MouseState.Position.Vector2( ) / Cam.Scale + Cam.Position;
+            SelectedMap = MousePosition.FloorToPoint( ) / MAP_SIZE;
+            SelectedPoint = MousePosition.FloorToPoint( ).Mod(MAP_SIZE);
 
             base.Update(gameTime);
         }
@@ -92,10 +111,10 @@ namespace LightRise.MapEditor {
             SpriteBatch.Begin( );
             for (uint i = 0; i < Maps.Length; i++) {
                 for (uint j = 0; j < Maps[i].Length; j++) {
-                    Maps[i][j].Draw(SpriteBatch, new Camera(Cam.Position - new Vector2(MAP_WIDTH * i, MAP_HEIGHT * j), Cam.Scale));
+                    Maps[i][j].Draw(SpriteBatch, new Camera(Cam.Position - new Vector2(MAP_SIZE.X * i, MAP_SIZE.Y * j), Cam.Scale));
                 }
             }
-            SpriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(Cam.WorldToWindow(MousePosition), Cam.Scale.RoundToPoint( )), new Color(0, 0, 255, 127));
+            SpriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(Cam.WorldToWindow(SelectedPoint.Vector2( )), Cam.Scale.RoundToPoint( )), new Color(0, 0, 255, 127));
             SpriteBatch.End( );
 
             base.Draw(gameTime);
