@@ -10,13 +10,15 @@ namespace LightRise.Main {
 
         public const float WIDTH = 0.8f;
         public const float HEIGHT = 1.6f;
-        public const float GRAVITY = 0.05f;
+        public const float GRAVITY = 0.02f;
         public const float SIT_HEIGHT = 0.9f;
 
         public const uint WALK_TIME = 20;
         public const uint TO_SIT_TIME = 10;
         public const uint FROM_SIT_TIME = 15;
         public const uint SQUAT_TIME = 40;
+        public const uint GET_DOWN_TIME = 30;
+        public const uint GET_UP_TIME = 60;
         public enum ACTIONS {
             STAND,
             WALK_LEFT,
@@ -27,6 +29,10 @@ namespace LightRise.Main {
             FROM_SIT,
             SQUAT_LEFT,
             SQUAT_RIGHT,
+            GET_DOWN,
+            HANG_DOWN,
+            GET_UP,
+            JUMP_ON,
         }
         public ACTIONS Action = ACTIONS.STAND;
 
@@ -105,6 +111,19 @@ namespace LightRise.Main {
                 Action = ACTIONS.SIT;
                 GridPosition += new Point(1, 0);
                 break;
+            case ACTIONS.GET_DOWN:
+                Action = ACTIONS.HANG_DOWN;
+                GridPosition += new Point(0, 2);
+                break;
+            case ACTIONS.GET_UP:
+                Action = ACTIONS.STAND;
+                GridPosition += new Point(0, -2);
+                break;
+            case ACTIONS.JUMP_ON:
+                Action = ACTIONS.HANG_DOWN;
+                GridPosition += new Point(0, -2);
+                VSpeed = 0f;
+                break;
             }
         }
 
@@ -122,7 +141,7 @@ namespace LightRise.Main {
                 Position += new Vector2(1f / WALK_TIME, 0);
             }
             if (Action == ACTIONS.STAND) {
-                if (!Collision(GridPosition + new Point(0, 2))) {
+                if (Map[GridPosition + new Point(0, 2)] == Map.EMPTY) {
                     Action = ACTIONS.FALL;
                 } else if (state.Keyboard.IsKeyDown(Keys.A) && !Collision(GridPosition + new Point(-1, 0))) {
                     Action = ACTIONS.WALK_LEFT;
@@ -131,15 +150,38 @@ namespace LightRise.Main {
                     Action = ACTIONS.WALK_RIGHT;
                     Alarm = WALK_TIME;
                 } else if (state.Keyboard.IsKeyDown(Keys.S)) {
-                    Action = ACTIONS.TO_SIT;
-                    Alarm = TO_SIT_TIME;
+                    Point temp = GridPosition + new Point(0, 2);
+                    if (Map[temp] == Map.LEFT_SHELF ||
+                        Map[temp] == Map.RIGHT_SHELF) {
+                        Action = ACTIONS.GET_DOWN;
+                        Alarm = GET_DOWN_TIME;
+                    } else {
+                        Action = ACTIONS.TO_SIT;
+                        Alarm = TO_SIT_TIME;
+                    }
+                } else if (state.Keyboard.IsKeyDown(Keys.W)) {
+                    Point temp = GridPosition + new Point(0, -2);
+                    if (Map[temp] == Map.LEFT_SHELF || Map[temp] == Map.RIGHT_SHELF) {
+                        Action = ACTIONS.JUMP_ON;
+                        uint h = 2u;
+                        float t = (float)Math.Sqrt(2f * h / GRAVITY);
+                        VSpeed = -GRAVITY * t;
+                        Alarm = (uint)Math.Floor(t);
+                    }
                 }
+            }
+            if (Action == ACTIONS.JUMP_ON) {
+                Position += new Vector2(0, VSpeed);
+                VSpeed += GRAVITY;
+            }
+            if (Action == ACTIONS.GET_DOWN) {
+                Position += new Vector2(0, 2f / GET_DOWN_TIME);
             }
             if (Action == ACTIONS.TO_SIT) {
                 VSize -= (HEIGHT - SIT_HEIGHT) / TO_SIT_TIME;
             }
             if (Action == ACTIONS.SIT) {
-                if (!Collision(GridPosition + new Point(0, 2))) {
+                if (Map[GridPosition + new Point(0, 2)] == Map.EMPTY) {
                     Action = ACTIONS.FALL;
                 } else if (state.Keyboard.IsKeyDown(Keys.W) && !Collision(GridPosition)) {
                     Action = ACTIONS.FROM_SIT;
@@ -152,13 +194,24 @@ namespace LightRise.Main {
                     Alarm = SQUAT_TIME;
                 }
             }
+            if (Action == ACTIONS.HANG_DOWN) {
+                if (state.Keyboard.IsKeyDown(Keys.S)) {
+                    Action = ACTIONS.FALL;
+                } else if (state.Keyboard.IsKeyDown(Keys.W)) {
+                    Action = ACTIONS.GET_UP;
+                    Alarm = GET_UP_TIME;
+                }
+            }
+            if (Action == ACTIONS.GET_UP) {
+                Position += new Vector2(0, -2f / GET_UP_TIME);
+            }
             if (Action == ACTIONS.FALL) {
                 VSpeed = Math.Min(2, VSpeed + GRAVITY);
                 Position += new Vector2(0f, VSpeed);
                 if (Position.Y - GridPosition.Y > 1f) {
                     Vector2 pos = Position;
                     GridPosition += new Point(0, 1);
-                    if (Collision(GridPosition + new Point(0, 2))) {
+                    if (Map[GridPosition + new Point(0, 2)] != Map.EMPTY) {
                         VSize = HEIGHT;
                         Action = ACTIONS.STAND;
                         VSpeed = 0f;

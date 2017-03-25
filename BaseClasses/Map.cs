@@ -100,6 +100,58 @@ namespace LightRise.BaseClasses {
             return result;
         }
 
+        public uint Left {
+            get {
+                for (uint i = 0; i < Width; i++) {
+                    for (uint j = 0; j < Height; j++) {
+                        if (this[i, j] != WALL) {
+                            return i;
+                        }
+                    }
+                }
+                throw new EmptyMapException( );
+            }
+        }
+
+        public uint Top {
+            get {
+                for (uint j = 0; j < Height; j++) {
+                    for (uint i = 0; i < Width; i++) {
+                        if (this[i, j] != WALL) {
+                            return j;
+                        }
+                    }
+                }
+                throw new EmptyMapException( );
+            }
+        }
+
+        public uint Right {
+            get {
+                for (uint i = Width - 1; i >= 0; i--) {
+                    for (uint j = 0; j < Height; j++) {
+                        if (this[i, j] != WALL) {
+                            return i;
+                        }
+                    }
+                }
+                throw new EmptyMapException( );
+            }
+        }
+
+        public uint Bottom {
+            get {
+                for (uint j = Height - 1; j >= 0; j--) {
+                    for (uint i = 0; i < Width; i++) {
+                        if (this[i, j] != WALL) {
+                            return j;
+                        }
+                    }
+                }
+                throw new EmptyMapException( );
+            }
+        }
+
         public static Map[][] ConvertFromBig(Map map, Point MapSize)
         {
             uint with = (uint)(map.Width / MapSize.X);
