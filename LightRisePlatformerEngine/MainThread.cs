@@ -47,6 +47,11 @@ namespace LightRise.Main {
             Map = WinUtils.LoadMap( );
             Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
             SimpleUtils.Init(GraphicsDevice);
+            // TODO: Renders will be used for more fust drawing of the background... Later
+            Renders = new RenderTarget2D[4];
+            for (uint i = 0; i < Renders.Length; i++) {
+                Renders[i] = new RenderTarget2D(GraphicsDevice, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight);
+            }
 
             base.Initialize( );
         }
@@ -58,10 +63,6 @@ namespace LightRise.Main {
         protected override void LoadContent( ) {
             // Create a new SpriteBatch, which can be used to draw textures.
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            Renders = new RenderTarget2D[4];
-            for (uint i = 0; i < Renders.Length; i++) {
-                Renders[i] = new RenderTarget2D(GraphicsDevice, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight);
-            }
 
             // TODO: use this.Content to load your game content here
         }
