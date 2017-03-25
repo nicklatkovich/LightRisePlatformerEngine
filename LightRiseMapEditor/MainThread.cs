@@ -170,7 +170,7 @@ namespace LightRise.MapEditor {
             }
 
             if (KeyboardState.IsKeyDown(Keys.S) && !PreviousKeyboardState.IsKeyDown(Keys.S)) {
-                Map mapToSave = WinUtils.ConvertToBigMap(Maps);
+                Map mapToSave = Map.ConvertToBig(Maps);
                 WinUtils.Save(mapToSave);
             }
 

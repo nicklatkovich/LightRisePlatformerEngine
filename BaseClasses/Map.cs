@@ -72,5 +72,22 @@ namespace LightRise.BaseClasses {
             }
         }
 
+        // TODO: optimize this function
+        // Minimize out-matrix
+        public static Map ConvertToBig(Map[ ][ ] maps) {
+            uint width = maps[0][0].Width;
+            uint height = maps[0][0].Height;
+
+            Map result = new Map((uint)maps.Length * width, (uint)maps[0].Length * height);
+            for (uint i = 0; i < maps.Length; i++) {
+                if (maps[i].Length != maps[0].Length) {
+                    throw new Exception("Wrong Map[][] format");
+                }
+                for (uint j = 0; j < maps[i].Length; j++) {
+                    result.Add(maps[i][j], new Point((int)(i * width), (int)(j * height)));
+                }
+            }
+            return result;
+        }
     }
 }
