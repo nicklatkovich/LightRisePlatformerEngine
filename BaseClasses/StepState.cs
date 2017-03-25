@@ -6,8 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LightRise.Main {
-    class StepState {
+namespace LightRise.BaseClasses {
+    public class StepState {
 
         public readonly GameTime Time;
         public readonly KeyboardState Keyboard;
