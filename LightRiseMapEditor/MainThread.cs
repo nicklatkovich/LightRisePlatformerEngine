@@ -26,6 +26,8 @@ namespace LightRise.MapEditor {
         public Point MousePreviousPosition;
         KeyboardState PreviousKeyboardState;
 
+        public Point PlayerPosition;
+
         Camera Cam;
         public uint CurrentValue = 1;
 
@@ -49,7 +51,11 @@ namespace LightRise.MapEditor {
         /// </summary>
         protected override void Initialize( ) {
             Maps = SimpleUtils.Create2DArray(1, 1, new Map(MAP_SIZE));
-            Maps[0][0].Randomize( );
+            //Maps[0][0].Randomize( );
+            PlayerPosition = new Point(12, 7);
+            for (uint x = 10; x <= 14; x++) {
+                Maps[0][0][x, 9] = Map.WALL;
+            }
             Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
             SimpleUtils.Init(GraphicsDevice);
 
@@ -107,7 +113,7 @@ namespace LightRise.MapEditor {
 
             if (KeyboardState.IsKeyDown(Keys.D1)) {
                 CurrentValue = Map.WALL;
-            } else if (KeyboardState.IsKeyDown(Keys.D0)) {
+            } else if (KeyboardState.IsKeyDown(Keys.Tab)) {
                 CurrentValue = Map.EMPTY;
             }
 
@@ -126,6 +132,7 @@ namespace LightRise.MapEditor {
                         Maps = newMaps;
                         Cam.Position += new Vector2(MAP_SIZE.X, 0f);
                         SelectedMap.X += 1;
+                        PlayerPosition.X += MAP_SIZE.X;
                     }
                     while (SelectedMap.Y < 0) {
                         Map[ ][ ] newMaps = SimpleUtils.Create2DArray<Map>((uint)Maps.Length, (uint)Maps[0].Length + 1, null);
@@ -140,6 +147,7 @@ namespace LightRise.MapEditor {
                         Maps = newMaps;
                         Cam.Position += new Vector2(0f, MAP_SIZE.Y);
                         SelectedMap.Y += 1;
+                        PlayerPosition.Y += MAP_SIZE.X;
                     }
                     while (SelectedMap.X >= Maps.Length) {
                         Map[ ][ ] newMaps = SimpleUtils.Create2DArray<Map>((uint)Maps.Length + 1, (uint)Maps[0].Length, null);
@@ -166,7 +174,11 @@ namespace LightRise.MapEditor {
                         Maps = newMaps;
                     }
                 }
-                Maps[SelectedMap.X][SelectedMap.Y][(uint)SelectedPoint.X, (uint)SelectedPoint.Y] = CurrentValue;
+                Point pos = SelectedMap * MAP_SIZE + SelectedPoint;
+                if (!pos.Equals(PlayerPosition) &&
+                    !pos.Equals(PlayerPosition + new Point(0, 1))) {
+                    Maps[SelectedMap.X][SelectedMap.Y][(uint)SelectedPoint.X, (uint)SelectedPoint.Y] = CurrentValue;
+                }
             }
 
             if (KeyboardState.IsKeyDown(Keys.S) && !PreviousKeyboardState.IsKeyDown(Keys.S)) {
@@ -192,7 +204,8 @@ namespace LightRise.MapEditor {
                     Maps[i][j].Draw(SpriteBatch, new Camera(Cam.Position - new Vector2(MAP_SIZE.X * i, MAP_SIZE.Y * j), Cam.Scale));
                 }
             }
-            SpriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(Cam.WorldToWindow(SelectedPoint.Vector2( )), Cam.Scale.RoundToPoint( )), new Color(0, 0, 255, 127));
+            SpriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(Cam.WorldToWindow(SelectedPoint.Vector2( ).Add(0.25f)), (Cam.Scale / 2f).RoundToPoint( )), new Color(0, 0, 255, 127));
+            SpriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(Cam.WorldToWindow(PlayerPosition.Vector2( ) + new Vector2(0.25f, 0.5f)), (Cam.Scale + new Vector2(-Cam.Scale.X / 2f, Cam.Scale.Y / 2f)).RoundToPoint( )), Color.Green);
             SpriteBatch.End( );
 
             base.Draw(gameTime);

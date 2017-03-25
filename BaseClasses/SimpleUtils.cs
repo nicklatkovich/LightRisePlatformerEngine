@@ -71,5 +71,9 @@ namespace LightRise.BaseClasses {
             return new Point(point1.X % point2.X, point1.Y % point2.Y);
         }
 
+        public static Vector2 Add(this Vector2 vector, float value) {
+            return new Vector2(vector.X + value, vector.Y + value);
+        }
+
     }
 }
