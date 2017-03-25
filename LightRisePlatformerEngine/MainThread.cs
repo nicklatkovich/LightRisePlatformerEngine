@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 using LightRise.BaseClasses;
 using LightRise.WinUtilsLib;
+using System;
 
 namespace LightRise.Main {
     /// <summary>
@@ -46,8 +47,9 @@ namespace LightRise.Main {
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize( ) {
-            Map = WinUtils.LoadMap("Content/qwe.lrmap");
-            Player = new Player(new Point(12, 7));
+            Tuple<Map, Point> tuple = WinUtils.LoadMap("Content/asd.lrmap");
+            Map = tuple.Item1;
+            Player = new Player(tuple.Item2);
             Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
             SimpleUtils.Init(GraphicsDevice);
             // TODO: Renders will be used for more fust drawing of the background... Later
