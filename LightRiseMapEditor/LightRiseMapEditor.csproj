@@ -60,9 +60,9 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LightRisePlatformerEngine\LightRisePlatformerEngine.csproj">
-      <Project>{886059c1-358f-4ce2-9660-e719419be6af}</Project>
-      <Name>LightRisePlatformerEngine</Name>
+    <ProjectReference Include="..\BaseClasses\BaseClasses.csproj">
+      <Project>{dfc53e31-b9b5-48cc-850b-f28656f7ea35}</Project>
+      <Name>BaseClasses</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

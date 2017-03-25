@@ -3,19 +3,25 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using LightRise.BaseClasses;
+using System.Collections.Generic;
 
 namespace LightRise.MapEditor {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
     public class MainThread : Game {
+
+        const uint MAP_WIDTH = 64;
+        const uint MAP_HEIGHT = 64;
+
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
 
-        Map Map;
+        List<List<Map>> MapGrid;
 
         public MainThread( ) {
             Graphics = new GraphicsDeviceManager(this);
+            IsMouseVisible = true;
             Content.RootDirectory = "Content";
         }
 
@@ -26,7 +32,9 @@ namespace LightRise.MapEditor {
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize( ) {
-            // TODO: Add your initialization logic here
+            MapGrid = new List<List<Map>>( );
+            MapGrid.Add(new List<Map>( ));
+            MapGrid[0].Add(new Map(MAP_WIDTH, MAP_HEIGHT));
 
             base.Initialize( );
         }

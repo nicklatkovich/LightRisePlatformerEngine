@@ -1,12 +1,13 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace LightRise.BaseClasses {
     public class Map {
 
-        private UInt32 _width;
-        private UInt32 _height;
+        protected UInt32 _width;
+        protected UInt32 _height;
 
         public enum CellType {
             Empty = 0,
@@ -16,7 +17,7 @@ namespace LightRise.BaseClasses {
         public UInt32 Width { get { return _width; } }
         public UInt32 Height { get { return _height; } }
 
-        private CellType[ ][ ] Grid;
+        protected CellType[ ][ ] Grid;
 
         public CellType this[UInt32 i, UInt32 j] { get { return Grid[i][j]; } }
 
@@ -26,15 +27,16 @@ namespace LightRise.BaseClasses {
             Grid = SimpleUtils.Create2DArray(Width, Height, CellType.Empty);
             for (UInt32 i = 0; i < Width; i++) {
                 for (UInt32 j = 0; j < Height; j++) {
+                    Grid[i][j] = CellType.Empty;
                     //Grid[i][j] = SimpleUtils.Choose(new CellType[ ] { CellType.Empty, CellType.Wall }); // 50:50
-                    Grid[i][j] = SimpleUtils.Choose(new Tuple<CellType, float>[ ] {
-                        new Tuple<CellType, float>(CellType.Empty, 9),
-                        new Tuple<CellType, float>(CellType.Wall, 1)});
+                    //Grid[i][j] = SimpleUtils.Choose(new Tuple<CellType, float>[ ] {
+                    //    new Tuple<CellType, float>(CellType.Empty, 9),
+                    //    new Tuple<CellType, float>(CellType.Wall, 1)});
                 }
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Camera cam) {
+        public virtual void Draw(SpriteBatch spriteBatch, Camera cam) {
             for (UInt32
                 i = (UInt32)Math.Max(0, (Int32)Math.Floor(cam.Position.X)),
                 iTo = Math.Min(Width, (UInt32)Math.Ceiling(cam.Position.X + spriteBatch.GraphicsDevice.PresentationParameters.BackBufferWidth / cam.Scale.X));

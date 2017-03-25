@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define MAP_EDITOR
+using System;
 
 namespace LightRise.MapEditor {
 #if WINDOWS || LINUX
