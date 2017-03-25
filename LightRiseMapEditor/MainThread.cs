@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Input;
 using LightRise.BaseClasses;
 using LightRise.WinUtilsLib;
 using System;
+using System.Collections.Generic;
+using Microsoft.VisualBasic;
 
 namespace LightRise.MapEditor {
     /// <summary>
@@ -20,6 +22,7 @@ namespace LightRise.MapEditor {
 
         }
 
+        List<Interactive> ListOfInstances = new List<Interactive>( );
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
 
@@ -120,6 +123,16 @@ namespace LightRise.MapEditor {
                 CurrentValue = Map.RIGHT_SHELF;
             } else if (KeyboardState.IsKeyDown(Keys.Tab)) {
                 CurrentValue = Map.EMPTY;
+            } else if (KeyboardState.IsKeyDown(Keys.OemTilde)) {
+                try {
+                    string ID = Interaction.InputBox("ID of the object", "Input", "");
+                    foreach (var a in ListOfInstances) {
+                        if (a.ID == ID) {
+                            throw new Exception("It is not possible to create an object with this ID");
+                        }
+                    }
+                    ListOfInstances.Add(new Interactive(SelectedMap * MAP_SIZE + SelectedPoint, ID));
+                } catch { }
             }
 
             if (MouseState.LeftButton == ButtonState.Pressed) {
