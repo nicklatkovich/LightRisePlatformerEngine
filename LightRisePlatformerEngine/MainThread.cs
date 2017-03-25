@@ -44,7 +44,7 @@ namespace LightRise.Main {
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize( ) {
-            Map = WinUtils.LoadMap( );
+            Map = WinUtils.LoadMap("Content/qwe.lrmap");
             Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
             SimpleUtils.Init(GraphicsDevice);
             // TODO: Renders will be used for more fust drawing of the background... Later
