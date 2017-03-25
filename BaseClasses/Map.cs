@@ -19,7 +19,10 @@ namespace LightRise.BaseClasses {
 
         protected CellType[ ][ ] Grid;
 
-        public CellType this[UInt32 i, UInt32 j] { get { return Grid[i][j]; } }
+        public CellType this[UInt32 i, UInt32 j] {
+            get { return Grid[i][j]; }
+            set { Grid[i][j] = value; }
+        }
 
         public Map(UInt32 width, UInt32 height) {
             _width = width;
@@ -33,7 +36,7 @@ namespace LightRise.BaseClasses {
         }
 
         // TODO: Delete this function when it is not needed for testing
-        public void Randomize() {
+        public void Randomize( ) {
             for (uint i = 0; i < Width; i++) {
                 for (uint j = 0; j < Height; j++) {
                     Grid[i][j] = SimpleUtils.Choose(new Tuple<CellType, float>[ ] {
@@ -53,7 +56,7 @@ namespace LightRise.BaseClasses {
                     jTo = Math.Min(Height, (UInt32)Math.Ceiling(cam.Position.Y + spriteBatch.GraphicsDevice.PresentationParameters.BackBufferHeight / cam.Scale.Y));
                     j < jTo; j++) {
                     if (this[i, j] == CellType.Wall) {
-                        spriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(cam.WorldToWindow(new Vector2(i, j)), cam.Scale.CeilingToPoint()), Color.Red);
+                        spriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(cam.WorldToWindow(new Vector2(i, j)), cam.Scale.CeilingToPoint( )), Color.Red);
                     }
                 }
             }

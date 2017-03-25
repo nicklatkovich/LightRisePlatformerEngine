@@ -86,12 +86,16 @@ namespace LightRise.MapEditor {
             MousePreviousPosition = MousePosition;
             MouseState MouseState = Mouse.GetState( );
             MousePosition = MouseState.Position;
+            if (MouseState.RightButton == ButtonState.Pressed) {
+                Cam.Position = Cam.Position + (MousePreviousPosition - MousePosition).Vector2( ) / Cam.Scale;
+            }
+
             Vector2 MouseWorldPosition = MousePosition.Vector2( ) / Cam.Scale + Cam.Position;
             SelectedMap = MouseWorldPosition.FloorToPoint( ) / MAP_SIZE;
             SelectedPoint = MouseWorldPosition.FloorToPoint( ).Mod(MAP_SIZE);
 
-            if (MouseState.RightButton == ButtonState.Pressed) {
-                Cam.Position = Cam.Position + (MousePreviousPosition - MousePosition).Vector2() / Cam.Scale;
+            if (MouseState.LeftButton == ButtonState.Pressed) {
+                Maps[SelectedMap.X][SelectedMap.Y][(uint)SelectedPoint.X, (uint)SelectedPoint.Y] = Map.CellType.Wall;
             }
 
             base.Update(gameTime);
