@@ -43,7 +43,6 @@ namespace LightRise.PlatformerEngine {
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize( ) {
-            // TODO: Add your initialization logic here
             Map = new Map(256, 256);
             Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
             SimpleUtils.Init(GraphicsDevice);
@@ -86,7 +85,6 @@ namespace LightRise.PlatformerEngine {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || KeyboardState.IsKeyDown(Keys.Escape))
                 Exit( );
 
-            // TODO: Add your update logic here
             float cam_spd = 0.1f;
             float dx = (KeyboardState.IsKeyDown(Keys.Right) ? cam_spd : 0) - (KeyboardState.IsKeyDown(Keys.Left) ? cam_spd : 0);
             float dy = (KeyboardState.IsKeyDown(Keys.Down) ? cam_spd : 0) - (KeyboardState.IsKeyDown(Keys.Up) ? cam_spd : 0);
@@ -102,7 +100,6 @@ namespace LightRise.PlatformerEngine {
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographic(Cam.Scale.X, Cam.Scale.Y, -0.1f, 1f));
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographicOffCenter(new Rectangle((int)(Cam.Position.X - Cam.Scale.X / 2), (int)(Cam.Position.Y - Cam.Scale.Y / 2), (int)Cam.Scale.X, (int)Cam.Scale.Y), 1f, 1000f));
             SpriteBatch.Begin( );
