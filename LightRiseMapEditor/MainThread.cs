@@ -190,6 +190,12 @@ namespace LightRise.MapEditor {
                 WinUtils.Save(mapToSave, PlayerPosition);
             }
 
+            if (KeyboardState.IsKeyDown(Keys.O) && !PreviousKeyboardState.IsKeyDown(Keys.O))
+            {
+                Map mapToLoad = WinUtils.LoadMap();
+                Maps = Map.ConvertFromBig(mapToLoad, MAP_SIZE);
+            }
+
             PreviousKeyboardState = KeyboardState;
 
             base.Update(gameTime);
