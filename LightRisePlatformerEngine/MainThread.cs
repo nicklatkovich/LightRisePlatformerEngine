@@ -16,8 +16,9 @@ namespace LightRise.Main {
         SpineObject spineObj;
 
         RenderTarget2D[ ] Renders;
-        Map Map;
+        public Map Map { get; protected set; }
         Camera Cam;
+        Player Player;
 
         public MainThread( ) {
             Graphics = new GraphicsDeviceManager(this);
@@ -45,7 +46,8 @@ namespace LightRise.Main {
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize( ) {
-            Map = WinUtils.LoadMap( );
+            Map = WinUtils.LoadMap("Content/qwe.lrmap");
+            Player = new Player(new Point(12, 7));
             Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
             SimpleUtils.Init(GraphicsDevice);
             // TODO: Renders will be used for more fust drawing of the background... Later
@@ -83,10 +85,9 @@ namespace LightRise.Main {
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime) {
+            StepState State = new StepState(gameTime, Keyboard.GetState( ), Mouse.GetState( ));
 
-            KeyboardState KeyboardState = Keyboard.GetState( );
-
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || KeyboardState.IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || State.Keyboard.IsKeyDown(Keys.Escape))
                 Exit( );
 
             float cam_spd = 0.1f;
@@ -96,10 +97,13 @@ namespace LightRise.Main {
             }
             else
                 spineObj.Scale = 1;
-            float dx = (KeyboardState.IsKeyDown(Keys.Right) ? cam_spd : 0) - (KeyboardState.IsKeyDown(Keys.Left) ? cam_spd : 0);
-            float dy = (KeyboardState.IsKeyDown(Keys.Down) ? cam_spd : 0) - (KeyboardState.IsKeyDown(Keys.Up) ? cam_spd : 0);
+            float dx = (State.Keyboard.IsKeyDown(Keys.Right) ? cam_spd : 0) - (State.Keyboard.IsKeyDown(Keys.Left) ? cam_spd : 0);
+            float dy = (State.Keyboard.IsKeyDown(Keys.Down) ? cam_spd : 0) - (State.Keyboard.IsKeyDown(Keys.Up) ? cam_spd : 0);
             Cam.Position = new Vector2(Cam.Position.X + dx, Cam.Position.Y + dy);
             spineObj.Update(gameTime);
+
+            Player.Step(State);
+
             base.Update(gameTime);
         }
 
@@ -113,7 +117,8 @@ namespace LightRise.Main {
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographic(Cam.Scale.X, Cam.Scale.Y, -0.1f, 1f));
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographicOffCenter(new Rectangle((int)(Cam.Position.X - Cam.Scale.X / 2), (int)(Cam.Position.Y - Cam.Scale.Y / 2), (int)Cam.Scale.X, (int)Cam.Scale.Y), 1f, 1000f));
             SpriteBatch.Begin( );
-            //Map.Draw(SpriteBatch, Cam);
+            Map.Draw(SpriteBatch, Cam);
+            Player.Draw(SpriteBatch, Cam);
             SpriteBatch.End( );
             spineObj.Draw(Cam);
 

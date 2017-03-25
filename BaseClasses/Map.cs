@@ -20,6 +20,10 @@ namespace LightRise.BaseClasses {
             get { return Grid[i][j]; }
             set { Grid[i][j] = value; }
         }
+        public uint this[Point point] {
+            get { return Grid[point.X][point.Y]; }
+            set { Grid[point.X][point.Y] = value; }
+        }
 
         public Map(UInt32 width, UInt32 height) : this(new Point((int)width, (int)height)) {
 
