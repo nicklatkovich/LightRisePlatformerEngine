@@ -105,8 +105,10 @@ namespace Spine {
 			ay = y;
 			arotation = rotation;
 			Skeleton skeleton = this.skeleton;
-			ascaleX = scaleX * skeleton.scale;
-			ascaleY = scaleY * skeleton.scale;
+            /*scaleX *= skeleton.scale;
+            scaleY *= skeleton.scale;*/
+            ascaleX = scaleX;
+			ascaleY = scaleY;
 			ashearX = shearX;
 			ashearY = shearY;
 			appliedValid = true;
@@ -132,8 +134,8 @@ namespace Spine {
 				b = lb;
 				c = lc;
 				d = ld;
-				worldX = x + skeleton.x;
-				worldY = y + skeleton.y;
+				worldX = x * skeleton.scale + skeleton.x;
+				worldY = y * skeleton.scale + skeleton.y;
 //				worldSignX = Math.Sign(scaleX);
 //				worldSignY = Math.Sign(scaleY);
 				return;

@@ -13,6 +13,7 @@ namespace LightRise.Main {
 
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
+        SpineObject spineObj;
 
         RenderTarget2D[ ] Renders;
         Map Map;
@@ -63,6 +64,7 @@ namespace LightRise.Main {
         protected override void LoadContent( ) {
             // Create a new SpriteBatch, which can be used to draw textures.
             SpriteBatch = new SpriteBatch(GraphicsDevice);
+            spineObj = new SpineObject(GraphicsDevice, "Sample", 1, new Vector2(20, 10));
 
             // TODO: use this.Content to load your game content here
         }
@@ -88,10 +90,16 @@ namespace LightRise.Main {
                 Exit( );
 
             float cam_spd = 0.1f;
+            if (KeyboardState.IsKeyDown(Keys.R))
+            {
+                spineObj.Scale = 1.5f;
+            }
+            else
+                spineObj.Scale = 1;
             float dx = (KeyboardState.IsKeyDown(Keys.Right) ? cam_spd : 0) - (KeyboardState.IsKeyDown(Keys.Left) ? cam_spd : 0);
             float dy = (KeyboardState.IsKeyDown(Keys.Down) ? cam_spd : 0) - (KeyboardState.IsKeyDown(Keys.Up) ? cam_spd : 0);
             Cam.Position = new Vector2(Cam.Position.X + dx, Cam.Position.Y + dy);
-
+            spineObj.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -105,8 +113,9 @@ namespace LightRise.Main {
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographic(Cam.Scale.X, Cam.Scale.Y, -0.1f, 1f));
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographicOffCenter(new Rectangle((int)(Cam.Position.X - Cam.Scale.X / 2), (int)(Cam.Position.Y - Cam.Scale.Y / 2), (int)Cam.Scale.X, (int)Cam.Scale.Y), 1f, 1000f));
             SpriteBatch.Begin( );
-            Map.Draw(SpriteBatch, Cam);
+            //Map.Draw(SpriteBatch, Cam);
             SpriteBatch.End( );
+            spineObj.Draw(Cam);
 
             base.Draw(gameTime);
         }

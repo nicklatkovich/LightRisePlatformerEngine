@@ -13,3 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Sample.json
+/copy:Sample.json
+
+#begin Sample.png
+/copy:Sample.png
+
+#begin Sample.atlas
+/copy:Sample.atlas
+

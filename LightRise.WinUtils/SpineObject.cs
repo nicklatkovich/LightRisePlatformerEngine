@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using Spine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using LightRise.BaseClasses;
 
-namespace LightRise.BaseClasses
+namespace LightRise.WinUtilsLib
 {
     public class SpineObject
     {
@@ -20,7 +21,20 @@ namespace LightRise.BaseClasses
         SkeletonBounds bounds = new SkeletonBounds();
 
         public Vector2 pos;
-        public float Scale { set { Skeleton.Scale = value; } get { return Skeleton.Scale; } }
+        public float ScaleX { set { Skeleton.RootBone.ScaleX = value; } get { return Skeleton.RootBone.ScaleX; } }
+        public float ScaleY { set { Skeleton.RootBone.ScaleY = value; } get { return Skeleton.RootBone.ScaleY; } }
+        public float Scale
+        {
+            set
+            {
+                Skeleton.RootBone.ScaleX = value;
+                Skeleton.RootBone.ScaleY = value;
+            }
+            get
+            {
+                return Skeleton.RootBone.ScaleX;
+            }
+        }
 
         public SpineObject(GraphicsDevice Graphics, string filename, float scale, Vector2 pos, string headSlot = "head")
         {
@@ -49,6 +63,7 @@ namespace LightRise.BaseClasses
         public void Draw(Camera Cam)
         {
             skeleton.Pos = Cam.WorldToWindow(pos).ToVector2();
+            //skeleton.scale = Cam.Scale.X / 551f;
             skeletonRenderer.Begin();
             skeletonRenderer.Draw(skeleton);
             skeletonRenderer.End();
