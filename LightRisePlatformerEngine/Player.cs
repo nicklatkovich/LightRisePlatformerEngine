@@ -9,7 +9,7 @@ namespace LightRise.Main {
 
         public const float WIDTH = 0.8f;
         public const float HEIGHT = 1.6f;
-        public const float GRAVITY = 0.05f;
+        public const float GRAVITY = 0.02f;
         public const float SIT_HEIGHT = 0.9f;
 
         public const uint WALK_TIME = 20;
@@ -31,6 +31,7 @@ namespace LightRise.Main {
             GET_DOWN,
             HANG_DOWN,
             GET_UP,
+            JUMP_ON,
         }
         public ACTIONS Action = ACTIONS.STAND;
 
@@ -104,6 +105,11 @@ namespace LightRise.Main {
                 Action = ACTIONS.STAND;
                 GridPosition += new Point(0, -2);
                 break;
+            case ACTIONS.JUMP_ON:
+                Action = ACTIONS.HANG_DOWN;
+                GridPosition += new Point(0, -2);
+                VSpeed = 0f;
+                break;
             }
         }
 
@@ -140,8 +146,19 @@ namespace LightRise.Main {
                         Alarm = TO_SIT_TIME;
                     }
                 } else if (state.Keyboard.IsKeyDown(Keys.W)) {
-
+                    Point temp = GridPosition + new Point(0, -2);
+                    if (Map[temp] == Map.LEFT_SHELF || Map[temp] == Map.RIGHT_SHELF) {
+                        Action = ACTIONS.JUMP_ON;
+                        uint h = 2u;
+                        float t = (float)Math.Sqrt(2f * h / GRAVITY);
+                        VSpeed = -GRAVITY * t;
+                        Alarm = (uint)Math.Floor(t);
+                    }
                 }
+            }
+            if (Action == ACTIONS.JUMP_ON) {
+                Position += new Vector2(0, VSpeed);
+                VSpeed += GRAVITY;
             }
             if (Action == ACTIONS.GET_DOWN) {
                 Position += new Vector2(0, 2f / GET_DOWN_TIME);
