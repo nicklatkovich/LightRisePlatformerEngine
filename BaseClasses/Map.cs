@@ -1,8 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using System.Diagnostics;
-using System.IO;
 
 namespace LightRise.BaseClasses {
     public class Map {
@@ -23,15 +21,17 @@ namespace LightRise.BaseClasses {
             set { Grid[i][j] = value; }
         }
 
-        public Map(UInt32 width, UInt32 height) {
-            _width = width;
-            _height = height;
+        public Map(UInt32 width, UInt32 height) : this(new Point((int)width, (int)height)) {
+
+        }
+
+        public Map(Point size) {
+            if (size.X <= 0 || size.Y <= 0) {
+                throw new NotPositiveValueException( );
+            }
+            _width = (uint)size.X;
+            _height = (uint)size.Y;
             Grid = SimpleUtils.Create2DArray(Width, Height, EMPTY);
-            //for (UInt32 i = 0; i < Width; i++) {
-            //    for (UInt32 j = 0; j < Height; j++) {
-            //        Grid[i][j] = EMPTY;
-            //    }
-            //}
         }
 
         // TODO: Delete this function when it is not needed for testing
