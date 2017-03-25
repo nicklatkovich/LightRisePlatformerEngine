@@ -3,8 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using LightRise.BaseClasses;
-using System.Collections.Generic;
-using System;
+using LightRise.WinUtilsLib;
 
 namespace LightRise.MapEditor {
     /// <summary>
@@ -25,6 +24,7 @@ namespace LightRise.MapEditor {
 
         public Point MousePosition = new Point( );
         public Point MousePreviousPosition;
+        KeyboardState PreviousKeyboardState;
 
         Camera Cam;
 
@@ -83,8 +83,10 @@ namespace LightRise.MapEditor {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState( ).IsKeyDown(Keys.Escape))
                 Exit( );
 
-            MousePreviousPosition = MousePosition;
             MouseState MouseState = Mouse.GetState( );
+            KeyboardState KeyboardState = Keyboard.GetState( );
+
+            MousePreviousPosition = MousePosition;
             MousePosition = MouseState.Position;
             if (MouseState.RightButton == ButtonState.Pressed) {
                 Cam.Position = Cam.Position + (MousePreviousPosition - MousePosition).Vector2( ) / Cam.Scale;
@@ -95,8 +97,15 @@ namespace LightRise.MapEditor {
             SelectedPoint = MouseWorldPosition.FloorToPoint( ).Mod(MAP_SIZE);
 
             if (MouseState.LeftButton == ButtonState.Pressed) {
-                Maps[SelectedMap.X][SelectedMap.Y][(uint)SelectedPoint.X, (uint)SelectedPoint.Y] = Map.CellType.Wall;
+                Maps[SelectedMap.X][SelectedMap.Y][(uint)SelectedPoint.X, (uint)SelectedPoint.Y] = Map.WALL;
             }
+
+            if (KeyboardState.IsKeyDown(Keys.S) && !PreviousKeyboardState.IsKeyDown(Keys.S)) {
+                Map mapToSave = WinUtils.ConvertToBigMap(Maps);
+                WinUtils.Save(mapToSave);
+            }
+
+            PreviousKeyboardState = KeyboardState;
 
             base.Update(gameTime);
         }

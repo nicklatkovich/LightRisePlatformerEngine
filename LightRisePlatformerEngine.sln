@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "LightRisePlatformerEngine\Main.csproj", "{886059C1-358F-4CE2-9660-E719419BE6AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightRise.Main", "LightRisePlatformerEngine\LightRise.Main.csproj", "{886059C1-358F-4CE2-9660-E719419BE6AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditor", "LightRiseMapEditor\MapEditor.csproj", "{29E590BA-4CC4-48D4-ADBD-87B6B599DC01}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightRise.MapEditor", "LightRiseMapEditor\LightRise.MapEditor.csproj", "{29E590BA-4CC4-48D4-ADBD-87B6B599DC01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseClasses", "BaseClasses\BaseClasses.csproj", "{DFC53E31-B9B5-48CC-850B-F28656F7EA35}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightRise.BaseClasses", "BaseClasses\LightRise.BaseClasses.csproj", "{DFC53E31-B9B5-48CC-850B-F28656F7EA35}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightRise.WinUtilsLib", "LightRise.WinUtils\LightRise.WinUtilsLib.csproj", "{2E75DFBA-28B0-4753-B483-D4F66324C383}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,12 @@ Global
 		{DFC53E31-B9B5-48CC-850B-F28656F7EA35}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DFC53E31-B9B5-48CC-850B-F28656F7EA35}.Release|x86.ActiveCfg = Release|Any CPU
 		{DFC53E31-B9B5-48CC-850B-F28656F7EA35}.Release|x86.Build.0 = Release|Any CPU
+		{2E75DFBA-28B0-4753-B483-D4F66324C383}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{2E75DFBA-28B0-4753-B483-D4F66324C383}.Debug|x86.ActiveCfg = Debug|x86
+		{2E75DFBA-28B0-4753-B483-D4F66324C383}.Debug|x86.Build.0 = Debug|x86
+		{2E75DFBA-28B0-4753-B483-D4F66324C383}.Release|Any CPU.ActiveCfg = Release|x86
+		{2E75DFBA-28B0-4753-B483-D4F66324C383}.Release|x86.ActiveCfg = Release|x86
+		{2E75DFBA-28B0-4753-B483-D4F66324C383}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

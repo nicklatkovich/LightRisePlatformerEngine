@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{29E590BA-4CC4-48D4-ADBD-87B6B599DC01}</ProjectGuid>
+    <ProjectGuid>{886059C1-358F-4CE2-9660-E719419BE6AF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LightRiseMapEditor</RootNamespace>
-    <AssemblyName>LightRiseMapEditor</AssemblyName>
+    <RootNamespace>LightRisePlatformerEngine</RootNamespace>
+    <AssemblyName>LightRisePlatformerEngine</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>612,618</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -60,9 +61,9 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BaseClasses\BaseClasses.csproj">
-      <Project>{dfc53e31-b9b5-48cc-850b-f28656f7ea35}</Project>
-      <Name>BaseClasses</Name>
+    <ProjectReference Include="..\BaseClasses\LightRise.BaseClasses.csproj">
+      <Project>{DFC53E31-B9B5-48CC-850B-F28656F7EA35}</Project>
+      <Name>LightRise.BaseClasses</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
