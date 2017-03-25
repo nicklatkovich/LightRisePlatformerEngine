@@ -173,6 +173,7 @@ namespace LightRise.Main {
                         } else {
                             Action = ACTIONS.TO_SIT;
                             Alarm = TO_SIT_TIME;
+                            Hero.State.SetAnimation(0, "присесть ", false);
                         }
                     } else if (state.Keyboard.IsKeyDown(Keys.W)) {
                         Point temp = GridPosition + new Point(0, -2);
@@ -238,9 +239,11 @@ namespace LightRise.Main {
             }
             if (Action == ACTIONS.SQUAT_LEFT) {
                 Position += new Vector2(-1f / SQUAT_TIME, 0);
+                Hero.Skeleton.FlipX = false;
             }
             if (Action == ACTIONS.SQUAT_RIGHT) {
                 Position += new Vector2(1f / SQUAT_TIME, 0);
+                Hero.Skeleton.FlipX = true;
             }
             if (Action == ACTIONS.FROM_SIT) {
                 VSize += (HEIGHT - SIT_HEIGHT) / FROM_SIT_TIME;
