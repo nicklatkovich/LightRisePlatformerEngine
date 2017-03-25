@@ -80,6 +80,9 @@
     <Content Include="Content\qwe.lrmap">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\asd.lrmap">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BaseClasses\LightRise.BaseClasses.csproj">
