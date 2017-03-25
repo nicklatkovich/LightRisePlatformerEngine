@@ -28,10 +28,17 @@ namespace LightRise.BaseClasses {
             for (UInt32 i = 0; i < Width; i++) {
                 for (UInt32 j = 0; j < Height; j++) {
                     Grid[i][j] = CellType.Empty;
-                    //Grid[i][j] = SimpleUtils.Choose(new CellType[ ] { CellType.Empty, CellType.Wall }); // 50:50
-                    //Grid[i][j] = SimpleUtils.Choose(new Tuple<CellType, float>[ ] {
-                    //    new Tuple<CellType, float>(CellType.Empty, 9),
-                    //    new Tuple<CellType, float>(CellType.Wall, 1)});
+                }
+            }
+        }
+
+        // TODO: Delete this function when it is not needed for testing
+        public void Randomize() {
+            for (uint i = 0; i < Width; i++) {
+                for (uint j = 0; j < Height; j++) {
+                    Grid[i][j] = SimpleUtils.Choose(new Tuple<CellType, float>[ ] {
+                        new Tuple<CellType, float>(CellType.Empty, 9),
+                        new Tuple<CellType, float>(CellType.Wall, 1)});
                 }
             }
         }

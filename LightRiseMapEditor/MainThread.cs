@@ -17,11 +17,19 @@ namespace LightRise.MapEditor {
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
 
-        List<List<Map>> MapGrid;
+        Vector2 MousePosition;
+
+        Camera Cam;
+
+        Map[ ][ ] Maps;
+
+        Point SelectedMap;
+        Point SelectedPoint;
 
         public MainThread( ) {
             Graphics = new GraphicsDeviceManager(this);
             IsMouseVisible = true;
+            Mouse.WindowHandle = Window.Handle;
             Content.RootDirectory = "Content";
         }
 
@@ -32,9 +40,10 @@ namespace LightRise.MapEditor {
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize( ) {
-            MapGrid = new List<List<Map>>( );
-            MapGrid.Add(new List<Map>( ));
-            MapGrid[0].Add(new Map(MAP_WIDTH, MAP_HEIGHT));
+            Maps = SimpleUtils.Create2DArray(1, 1, new Map(MAP_WIDTH, MAP_HEIGHT));
+            Maps[0][0].Randomize( );
+            Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
+            SimpleUtils.Init(GraphicsDevice);
 
             base.Initialize( );
         }
@@ -67,7 +76,8 @@ namespace LightRise.MapEditor {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState( ).IsKeyDown(Keys.Escape))
                 Exit( );
 
-            // TODO: Add your update logic here
+            MouseState MouseState = Mouse.GetState( );
+            MousePosition = MouseState.Position.Vector2( ) / Cam.Scale + Cam.Position;
 
             base.Update(gameTime);
         }
@@ -79,7 +89,14 @@ namespace LightRise.MapEditor {
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            SpriteBatch.Begin( );
+            for (uint i = 0; i < Maps.Length; i++) {
+                for (uint j = 0; j < Maps[i].Length; j++) {
+                    Maps[i][j].Draw(SpriteBatch, new Camera(Cam.Position - new Vector2(MAP_WIDTH * i, MAP_HEIGHT * j), Cam.Scale));
+                }
+            }
+            SpriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(Cam.WorldToWindow(MousePosition), Cam.Scale.RoundToPoint( )), new Color(0, 0, 255, 127));
+            SpriteBatch.End( );
 
             base.Draw(gameTime);
         }

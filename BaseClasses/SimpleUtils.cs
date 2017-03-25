@@ -51,5 +51,13 @@ namespace LightRise.BaseClasses {
 
         public static float Random { get { return (float)_rand.NextDouble( ); } }
 
+        public static Vector2 Vector2(this Point point) {
+            return new Vector2(point.X, point.Y);
+        }
+
+        public static Point RoundToPoint(this Vector2 vector) {
+            return new Point((int)Math.Round(vector.X), (int)Math.Round(vector.Y));
+        }
+
     }
 }

@@ -31,5 +31,9 @@ namespace LightRise.BaseClasses {
             Scale = scale;
         }
 
+        public Point WorldToWindow(Vector2 point) {
+            return ((point - Position) * Scale).RoundToPoint( );
+        }
+
     }
 }
