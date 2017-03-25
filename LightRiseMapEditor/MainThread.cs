@@ -129,11 +129,11 @@ namespace LightRise.MapEditor
             }
             else if (KeyboardState.IsKeyDown(Keys.D2))
             {
-                CurrentValue = Map.LSHELF;
+                CurrentValue = Map.LEFT_SHELF;
             }
             else if (KeyboardState.IsKeyDown(Keys.D3))
             {
-                CurrentValue = Map.RSHELF;
+                CurrentValue = Map.RIGHT_SHELF;
             }
             else if (KeyboardState.IsKeyDown(Keys.Tab))
             {
