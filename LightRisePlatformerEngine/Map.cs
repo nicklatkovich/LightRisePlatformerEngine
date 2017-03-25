@@ -2,8 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-namespace LightRisePlatformerEngine {
-    class Map {
+namespace LightRise.BaseClasses {
+    public class Map {
 
         private UInt32 _width;
         private UInt32 _height;

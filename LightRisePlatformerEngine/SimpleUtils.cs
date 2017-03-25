@@ -2,15 +2,20 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace LightRisePlatformerEngine {
-    static class SimpleUtils {
+namespace LightRise.BaseClasses {
+    public static class SimpleUtils {
 
         private static Random _rand = new Random( );
         public static Texture2D WhiteRect { get; private set; }
 
-        static SimpleUtils( ) {
-            WhiteRect = new Texture2D(Program.MainThread.GraphicsDevice, 1, 1);
+        // ATTENTION: Use this method before using textures
+        // TODO: Fix it... Like anything. And remove this function to hell.
+        public static void Init(GraphicsDevice GraphicsDevice) {
+            WhiteRect = new Texture2D(GraphicsDevice, 1, 1);
             WhiteRect.SetData(new Color[ ] { Color.White });
+        }
+
+        static SimpleUtils( ) {
         }
 
         public static T[ ][ ] Create2DArray<T>(UInt32 width, UInt32 height, T @default) {

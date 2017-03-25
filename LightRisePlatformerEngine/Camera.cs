@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 
-namespace LightRisePlatformerEngine {
-    class Camera {
+namespace LightRise.BaseClasses {
+    public class Camera {
 
         private Vector2 _position;
         private Vector2 _scale;

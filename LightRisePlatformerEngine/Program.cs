@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LightRisePlatformerEngine {
+namespace LightRise.PlatformerEngine {
 #if WINDOWS || LINUX
     /// <summary>
     /// The main class.

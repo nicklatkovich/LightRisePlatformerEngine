@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 
-namespace LightRisePlatformerEngine {
+using LightRise.BaseClasses;
+
+namespace LightRise.PlatformerEngine {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
@@ -45,6 +46,7 @@ namespace LightRisePlatformerEngine {
             // TODO: Add your initialization logic here
             Map = new Map(256, 256);
             Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
+            SimpleUtils.Init(GraphicsDevice);
 
             base.Initialize( );
         }

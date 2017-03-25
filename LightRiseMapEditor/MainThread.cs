@@ -2,13 +2,17 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace LightRiseMapEditor {
+using LightRise.BaseClasses;
+
+namespace LightRise.MapEditor {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
     public class MainThread : Game {
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
+
+        Map Map;
 
         public MainThread( ) {
             Graphics = new GraphicsDeviceManager(this);

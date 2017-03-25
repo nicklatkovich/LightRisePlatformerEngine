@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LightRiseMapEditor {
+namespace LightRise.MapEditor {
 #if WINDOWS || LINUX
     /// <summary>
     /// The main class.
