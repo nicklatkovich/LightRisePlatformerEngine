@@ -23,18 +23,8 @@ namespace LightRise.MapEditor {
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
 
-        private Vector2 _mousePosition;
-        public Vector2 MousePosition {
-            get { return _mousePosition; }
-            set {
-                if (value == null) {
-                    throw new NullReferenceException( );
-                }
-                MousePreviousPosition = _mousePosition;
-                _mousePosition = value;
-            }
-        }
-        public Vector2 MousePreviousPosition { get; private set; }
+        public Point MousePosition = new Point( );
+        public Point MousePreviousPosition;
 
         Camera Cam;
 
@@ -93,10 +83,16 @@ namespace LightRise.MapEditor {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState( ).IsKeyDown(Keys.Escape))
                 Exit( );
 
+            MousePreviousPosition = MousePosition;
             MouseState MouseState = Mouse.GetState( );
-            MousePosition = MouseState.Position.Vector2( ) / Cam.Scale + Cam.Position;
-            SelectedMap = MousePosition.FloorToPoint( ) / MAP_SIZE;
-            SelectedPoint = MousePosition.FloorToPoint( ).Mod(MAP_SIZE);
+            MousePosition = MouseState.Position;
+            Vector2 MouseWorldPosition = MousePosition.Vector2( ) / Cam.Scale + Cam.Position;
+            SelectedMap = MouseWorldPosition.FloorToPoint( ) / MAP_SIZE;
+            SelectedPoint = MouseWorldPosition.FloorToPoint( ).Mod(MAP_SIZE);
+
+            if (MouseState.RightButton == ButtonState.Pressed) {
+                Cam.Position = Cam.Position + (MousePreviousPosition - MousePosition).Vector2() / Cam.Scale;
+            }
 
             base.Update(gameTime);
         }
