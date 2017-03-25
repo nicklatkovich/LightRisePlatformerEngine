@@ -10,18 +10,25 @@ namespace LightRise.Main {
         public const float WIDTH = 0.8f;
         public const float HEIGHT = 1.6f;
         public const float GRAVITY = 0.05f;
+        public const float SIT_HEIGHT = 0.9f;
 
         public const uint WALK_TIME = 20;
+        public const uint TO_SIT_TIME = 10;
+        public const uint FROM_SIT_TIME = 15;
         public enum ACTIONS {
             STAND,
             WALK_LEFT,
             WALK_RIGHT,
             FALL,
+            TO_SIT,
+            SIT,
+            FROM_SIT,
         }
         public ACTIONS Action = ACTIONS.STAND;
 
         public uint Alarm = 0;
         public float VSpeed = 0f;
+        public float VSize = HEIGHT;
 
         private Point _gridPosition;
         public Point GridPosition {
@@ -53,7 +60,7 @@ namespace LightRise.Main {
         }
 
         public void Draw(SpriteBatch surface, Camera camera) {
-            surface.Draw(SimpleUtils.WhiteRect, new Rectangle(camera.WorldToWindow(Position.Add(0.5f) - new Vector2(WIDTH / 2f, HEIGHT - 1.5f)), (new Vector2(WIDTH, HEIGHT) * camera.Scale).ToPoint( )), Color.Green);
+            surface.Draw(SimpleUtils.WhiteRect, new Rectangle(camera.WorldToWindow(Position.Add(0.5f) - new Vector2(WIDTH / 2f, VSize - 1.5f)), (new Vector2(WIDTH, VSize) * camera.Scale).ToPoint( )), Color.Green);
         }
 
         public void OnAlarm(StepState state) {
@@ -65,6 +72,14 @@ namespace LightRise.Main {
             case ACTIONS.WALK_RIGHT:
                 Action = ACTIONS.STAND;
                 GridPosition += new Point(1, 0);
+                break;
+            case ACTIONS.TO_SIT:
+                Action = ACTIONS.SIT;
+                VSize = SIT_HEIGHT;
+                break;
+            case ACTIONS.FROM_SIT:
+                Action = ACTIONS.STAND;
+                VSize = HEIGHT;
                 break;
             }
         }
@@ -92,6 +107,9 @@ namespace LightRise.Main {
                 } else if (state.Keyboard.IsKeyDown(Keys.D) && !Collision(GridPosition + new Point(1, 0))) {
                     Action = ACTIONS.WALK_RIGHT;
                     Alarm = WALK_TIME;
+                } else if (state.Keyboard.IsKeyDown(Keys.S)) {
+                    Action = ACTIONS.TO_SIT;
+                    Alarm = TO_SIT_TIME;
                 }
             }
             if (Action == ACTIONS.FALL) {
@@ -107,6 +125,18 @@ namespace LightRise.Main {
                         Position = pos;
                     }
                 }
+            }
+            if (Action == ACTIONS.TO_SIT) {
+                VSize -= (HEIGHT - SIT_HEIGHT) / TO_SIT_TIME;
+            }
+            if (Action == ACTIONS.SIT) {
+                if (state.Keyboard.IsKeyDown(Keys.W)) {
+                    Action = ACTIONS.FROM_SIT;
+                    Alarm = FROM_SIT_TIME;
+                }
+            }
+            if (Action == ACTIONS.FROM_SIT) {
+                VSize += (HEIGHT - SIT_HEIGHT) / FROM_SIT_TIME;
             }
         }
     }
