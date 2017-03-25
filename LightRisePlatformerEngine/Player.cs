@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Microsoft.Xna.Framework.Input;
+using LightRise.WinUtilsLib;
 
 namespace LightRise.Main {
     class Player : IInstance {
@@ -53,11 +54,18 @@ namespace LightRise.Main {
 
         public Vector2 Position;
 
+        public SpineObject hero;
+
         public Player(Point position) {
             if (Collision(position)) {
                 throw new Exception("Incorrect initial coordinates of the player");
             }
             GridPosition = position;
+        }
+
+        public void SetHero(GraphicsDevice graphicDevice, float baseScale)
+        {
+            hero = new SpineObject(graphicDevice, "Sample", baseScale, Position);
         }
 
         public static Map Map { get { return Program.MainThread.Map; } }
@@ -68,7 +76,13 @@ namespace LightRise.Main {
         }
 
         public void Draw(SpriteBatch surface, Camera camera) {
-            surface.Draw(SimpleUtils.WhiteRect, new Rectangle(camera.WorldToWindow(Position.Add(0.5f) - new Vector2(WIDTH / 2f, VSize - 1.5f)), (new Vector2(WIDTH, VSize) * camera.Scale).ToPoint( )), Color.Green);
+            if (hero == null)
+                surface.Draw(SimpleUtils.WhiteRect, new Rectangle(camera.WorldToWindow(Position.Add(0.5f) - new Vector2(WIDTH / 2f, VSize - 1.5f)), (new Vector2(WIDTH, VSize) * camera.Scale).ToPoint()), Color.Green);
+            else
+            {
+                hero.offset = new Vector2(camera.Scale.X / 2, camera.Scale.Y);
+                hero.Draw(camera);
+            }
         }
 
         public void OnAlarm(StepState state) {
@@ -215,6 +229,8 @@ namespace LightRise.Main {
             if (Action == ACTIONS.FROM_SIT) {
                 VSize += (HEIGHT - SIT_HEIGHT) / FROM_SIT_TIME;
             }
+            if (hero != null)
+                hero.pos = Position;
         }
     }
 }

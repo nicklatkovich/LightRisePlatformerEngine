@@ -47,6 +47,7 @@ namespace LightRise.Main {
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize( ) {
+            Player.SetHero(GraphicsDevice, 0.1f);
             Tuple<Map, Point> tuple = WinUtils.LoadMap("Content/asd.lrmap");
             Map = tuple.Item1;
             Player = new Player(tuple.Item2);
@@ -102,7 +103,7 @@ namespace LightRise.Main {
             float dx = (State.Keyboard.IsKeyDown(Keys.Right) ? cam_spd : 0) - (State.Keyboard.IsKeyDown(Keys.Left) ? cam_spd : 0);
             float dy = (State.Keyboard.IsKeyDown(Keys.Down) ? cam_spd : 0) - (State.Keyboard.IsKeyDown(Keys.Up) ? cam_spd : 0);
             Cam.Position = new Vector2(Cam.Position.X + dx, Cam.Position.Y + dy);
-            spineObj.Update(gameTime);
+            Player.hero.Update(gameTime);
 
             Player.Step(State);
 
