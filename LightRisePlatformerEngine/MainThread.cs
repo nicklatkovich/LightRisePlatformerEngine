@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using LightRise.BaseClasses;
+using LightRise.WinUtilsLib;
 
 namespace LightRise.Main {
     /// <summary>
@@ -43,7 +44,7 @@ namespace LightRise.Main {
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize( ) {
-            Map = new Map(256, 256);
+            Map = WinUtils.LoadMap( );
             Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
             SimpleUtils.Init(GraphicsDevice);
 

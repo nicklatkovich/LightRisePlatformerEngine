@@ -50,5 +50,23 @@ namespace LightRise.WinUtilsLib {
             }
         }
 
+        public static Map LoadMap( ) {
+            Map result = null;
+            OpenFileDialog ofd = new OpenFileDialog( );
+            ofd.Filter = "map files (*.lrmap)|*.lrmap";
+            ofd.RestoreDirectory = true;
+            if (ofd.ShowDialog( ) == DialogResult.OK) {
+                using (FileStream sw = new FileStream(ofd.FileName, FileMode.Open))
+                using (BinaryReader br = new BinaryReader(sw)) {
+                    result = new Map(br.ReadUInt32( ), br.ReadUInt32( ));
+                    for (uint i = 0; i < result.Width; i++) {
+                        for (uint j = 0; j < result.Height; j++) {
+                            result[i, j] = br.ReadUInt32( );
+                        }
+                    }
+                }
+            }
+            return result;
+        }
     }
 }
