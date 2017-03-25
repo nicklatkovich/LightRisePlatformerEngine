@@ -20,6 +20,7 @@ namespace LightRise.WinUtilsLib
         public AnimationState State { get { return state; } }
         SkeletonBounds bounds = new SkeletonBounds();
 
+        public Vector2 offset = Vector2.Zero;
         public Vector2 pos;
         public float ScaleX { set { Skeleton.RootBone.ScaleX = value; } get { return Skeleton.RootBone.ScaleX; } }
         public float ScaleY { set { Skeleton.RootBone.ScaleY = value; } get { return Skeleton.RootBone.ScaleY; } }
@@ -62,7 +63,7 @@ namespace LightRise.WinUtilsLib
 
         public void Draw(Camera Cam)
         {
-            skeleton.Pos = Cam.WorldToWindow(pos).ToVector2();
+            skeleton.Pos = Cam.WorldToWindow(pos).ToVector2() + offset;
             //skeleton.scale = Cam.Scale.X / 551f;
             skeletonRenderer.Begin();
             skeletonRenderer.Draw(skeleton);
