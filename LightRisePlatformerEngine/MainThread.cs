@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 using LightRise.BaseClasses;
 
-namespace LightRise.PlatformerEngine {
+namespace LightRise.Main {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>

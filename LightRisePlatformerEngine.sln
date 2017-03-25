@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightRisePlatformerEngine", "LightRisePlatformerEngine\LightRisePlatformerEngine.csproj", "{886059C1-358F-4CE2-9660-E719419BE6AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "LightRisePlatformerEngine\Main.csproj", "{886059C1-358F-4CE2-9660-E719419BE6AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightRiseMapEditor", "LightRiseMapEditor\LightRiseMapEditor.csproj", "{29E590BA-4CC4-48D4-ADBD-87B6B599DC01}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditor", "LightRiseMapEditor\MapEditor.csproj", "{29E590BA-4CC4-48D4-ADBD-87B6B599DC01}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseClasses", "BaseClasses\BaseClasses.csproj", "{DFC53E31-B9B5-48CC-850B-F28656F7EA35}"
 EndProject
