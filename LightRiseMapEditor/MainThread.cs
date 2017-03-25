@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 using LightRise.BaseClasses;
 using LightRise.WinUtilsLib;
+using System;
 
 namespace LightRise.MapEditor {
     /// <summary>
@@ -190,10 +191,13 @@ namespace LightRise.MapEditor {
                 WinUtils.Save(mapToSave, PlayerPosition);
             }
 
-            if (KeyboardState.IsKeyDown(Keys.O) && !PreviousKeyboardState.IsKeyDown(Keys.O))
-            {
-                Map mapToLoad = WinUtils.LoadMap();
-                Maps = Map.ConvertFromBig(mapToLoad, MAP_SIZE);
+            if (KeyboardState.IsKeyDown(Keys.O) && !PreviousKeyboardState.IsKeyDown(Keys.O)) {
+                Tuple<Map, Point> mapToLoad = WinUtils.LoadMap( );
+                Maps = Map.ConvertFromBig(mapToLoad.Item1, MAP_SIZE);
+                PlayerPosition = mapToLoad.Item2;
+                Cam.Position = PlayerPosition.ToVector2( ) - new Vector2(
+                    Graphics.PreferredBackBufferWidth / Cam.Scale.X / 2,
+                    Graphics.PreferredBackBufferHeight / Cam.Scale.Y / 2);
             }
 
             PreviousKeyboardState = KeyboardState;
