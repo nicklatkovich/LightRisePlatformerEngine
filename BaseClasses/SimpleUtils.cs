@@ -59,5 +59,9 @@ namespace LightRise.BaseClasses {
             return new Point((int)Math.Round(vector.X), (int)Math.Round(vector.Y));
         }
 
+        public static Point CeilingToPoint(this Vector2 vector) {
+            return new Point((int)Math.Ceiling(vector.X), (int)Math.Ceiling(vector.Y));
+        }
+
     }
 }

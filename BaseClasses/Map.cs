@@ -53,11 +53,7 @@ namespace LightRise.BaseClasses {
                     jTo = Math.Min(Height, (UInt32)Math.Ceiling(cam.Position.Y + spriteBatch.GraphicsDevice.PresentationParameters.BackBufferHeight / cam.Scale.Y));
                     j < jTo; j++) {
                     if (this[i, j] == CellType.Wall) {
-                        spriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(
-                            (Int32)((i - cam.Position.X) * cam.Scale.X),
-                            (Int32)((j - cam.Position.Y) * cam.Scale.Y),
-                            (Int32)cam.Scale.X,
-                            (Int32)cam.Scale.Y), Color.Red);
+                        spriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(cam.WorldToWindow(new Vector2(i, j)), cam.Scale.CeilingToPoint()), Color.Red);
                     }
                 }
             }
