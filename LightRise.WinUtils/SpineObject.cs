@@ -56,7 +56,9 @@ namespace LightRise.WinUtilsLib
         public void Update(GameTime gameTime)
         {
             state.Update(gameTime.ElapsedGameTime.Milliseconds / 1000f);
+            float Scale = this.Scale;
             state.Apply(skeleton);
+            this.Scale = Scale;
             skeleton.UpdateWorldTransform();
             bounds.Update(skeleton, true);
         }
@@ -64,6 +66,7 @@ namespace LightRise.WinUtilsLib
         public void Draw(Camera Cam)
         {
             skeleton.Pos = Cam.WorldToWindow(pos).ToVector2() + offset;
+            Scale = Cam.Scale.X;
             //skeleton.scale = Cam.Scale.X / 551f;
             skeletonRenderer.Begin();
             skeletonRenderer.Draw(skeleton);
