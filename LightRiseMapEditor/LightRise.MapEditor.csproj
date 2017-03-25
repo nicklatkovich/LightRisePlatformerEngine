@@ -9,8 +9,8 @@
     <ProjectGuid>{29E590BA-4CC4-48D4-ADBD-87B6B599DC01}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LightRiseMapEditor</RootNamespace>
-    <AssemblyName>LightRiseMapEditor</AssemblyName>
+    <RootNamespace>LightRise.MapEditor</RootNamespace>
+    <AssemblyName>LightRise.MapEditor</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>

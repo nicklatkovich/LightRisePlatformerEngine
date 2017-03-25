@@ -9,8 +9,8 @@
     <ProjectGuid>{2E75DFBA-28B0-4753-B483-D4F66324C383}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LightRise.WinUtils</RootNamespace>
-    <AssemblyName>LightRise.WinUtils</AssemblyName>
+    <RootNamespace>LightRise.WinUtilsLib</RootNamespace>
+    <AssemblyName>LightRise.WinUtilsLib</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>

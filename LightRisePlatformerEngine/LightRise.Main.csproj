@@ -9,8 +9,8 @@
     <ProjectGuid>{886059C1-358F-4CE2-9660-E719419BE6AF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LightRisePlatformerEngine</RootNamespace>
-    <AssemblyName>LightRisePlatformerEngine</AssemblyName>
+    <RootNamespace>LightRise.Main</RootNamespace>
+    <AssemblyName>LightRise.Main</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
