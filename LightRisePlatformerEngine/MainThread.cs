@@ -13,6 +13,7 @@ namespace LightRise.Main {
 
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
+        SpineObject spineObj;
 
         RenderTarget2D[ ] Renders;
         public Map Map { get; protected set; }
@@ -65,6 +66,7 @@ namespace LightRise.Main {
         protected override void LoadContent( ) {
             // Create a new SpriteBatch, which can be used to draw textures.
             SpriteBatch = new SpriteBatch(GraphicsDevice);
+            spineObj = new SpineObject(GraphicsDevice, "Sample", 1, new Vector2(20, 10));
 
             // TODO: use this.Content to load your game content here
         }
@@ -89,9 +91,16 @@ namespace LightRise.Main {
                 Exit( );
 
             float cam_spd = 0.1f;
+            if (KeyboardState.IsKeyDown(Keys.R))
+            {
+                spineObj.Scale = 1.5f;
+            }
+            else
+                spineObj.Scale = 1;
             float dx = (State.Keyboard.IsKeyDown(Keys.Right) ? cam_spd : 0) - (State.Keyboard.IsKeyDown(Keys.Left) ? cam_spd : 0);
             float dy = (State.Keyboard.IsKeyDown(Keys.Down) ? cam_spd : 0) - (State.Keyboard.IsKeyDown(Keys.Up) ? cam_spd : 0);
             Cam.Position = new Vector2(Cam.Position.X + dx, Cam.Position.Y + dy);
+            spineObj.Update(gameTime);
 
             Player.Step(State);
 
@@ -111,6 +120,7 @@ namespace LightRise.Main {
             Map.Draw(SpriteBatch, Cam);
             Player.Draw(SpriteBatch, Cam);
             SpriteBatch.End( );
+            spineObj.Draw(Cam);
 
             base.Draw(gameTime);
         }
