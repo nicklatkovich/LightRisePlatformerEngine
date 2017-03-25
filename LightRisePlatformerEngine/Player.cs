@@ -15,6 +15,7 @@ namespace LightRise.Main {
         public const uint WALK_TIME = 20;
         public const uint TO_SIT_TIME = 10;
         public const uint FROM_SIT_TIME = 15;
+        public const uint SQUAT_TIME = 40;
         public enum ACTIONS {
             STAND,
             WALK_LEFT,
@@ -23,6 +24,8 @@ namespace LightRise.Main {
             TO_SIT,
             SIT,
             FROM_SIT,
+            SQUAT_LEFT,
+            SQUAT_RIGHT,
         }
         public ACTIONS Action = ACTIONS.STAND;
 
@@ -55,8 +58,7 @@ namespace LightRise.Main {
 
         public static bool Collision(Point position) {
             return
-                Map[position] == Map.WALL ||
-                Map[position + new Point(0, 1)] == Map.WALL;
+                Map[position] == Map.WALL;
         }
 
         public void Draw(SpriteBatch surface, Camera camera) {
@@ -81,6 +83,14 @@ namespace LightRise.Main {
                 Action = ACTIONS.STAND;
                 VSize = HEIGHT;
                 break;
+            case ACTIONS.SQUAT_LEFT:
+                Action = ACTIONS.SIT;
+                GridPosition += new Point(-1, 0);
+                break;
+            case ACTIONS.SQUAT_RIGHT:
+                Action = ACTIONS.SIT;
+                GridPosition += new Point(1, 0);
+                break;
             }
         }
 
@@ -98,10 +108,9 @@ namespace LightRise.Main {
                 Position += new Vector2(1f / WALK_TIME, 0);
             }
             if (Action == ACTIONS.STAND) {
-                if (!Collision(GridPosition + new Point(0, 1))) {
+                if (!Collision(GridPosition + new Point(0, 2))) {
                     Action = ACTIONS.FALL;
-                }
-                if (state.Keyboard.IsKeyDown(Keys.A) && !Collision(GridPosition + new Point(-1, 0))) {
+                } else if (state.Keyboard.IsKeyDown(Keys.A) && !Collision(GridPosition + new Point(-1, 0))) {
                     Action = ACTIONS.WALK_LEFT;
                     Alarm = WALK_TIME;
                 } else if (state.Keyboard.IsKeyDown(Keys.D) && !Collision(GridPosition + new Point(1, 0))) {
@@ -112,13 +121,31 @@ namespace LightRise.Main {
                     Alarm = TO_SIT_TIME;
                 }
             }
+            if (Action == ACTIONS.TO_SIT) {
+                VSize -= (HEIGHT - SIT_HEIGHT) / TO_SIT_TIME;
+            }
+            if (Action == ACTIONS.SIT) {
+                if (!Collision(GridPosition + new Point(0, 2))) {
+                    Action = ACTIONS.FALL;
+                } else if (state.Keyboard.IsKeyDown(Keys.W) && !Collision(GridPosition)) {
+                    Action = ACTIONS.FROM_SIT;
+                    Alarm = FROM_SIT_TIME;
+                } else if (state.Keyboard.IsKeyDown(Keys.A) && !Collision(GridPosition + new Point(-1, 1))) {
+                    Action = ACTIONS.SQUAT_LEFT;
+                    Alarm = SQUAT_TIME;
+                } else if (state.Keyboard.IsKeyDown(Keys.D) && !Collision(GridPosition + new Point(1, 1))) {
+                    Action = ACTIONS.SQUAT_RIGHT;
+                    Alarm = SQUAT_TIME;
+                }
+            }
             if (Action == ACTIONS.FALL) {
                 VSpeed = Math.Min(2, VSpeed + GRAVITY);
                 Position += new Vector2(0f, VSpeed);
                 if (Position.Y - GridPosition.Y > 1f) {
                     Vector2 pos = Position;
                     GridPosition += new Point(0, 1);
-                    if (Collision(GridPosition + new Point(0, 1))) {
+                    if (Collision(GridPosition + new Point(0, 2))) {
+                        VSize = HEIGHT;
                         Action = ACTIONS.STAND;
                         VSpeed = 0f;
                     } else {
@@ -126,14 +153,11 @@ namespace LightRise.Main {
                     }
                 }
             }
-            if (Action == ACTIONS.TO_SIT) {
-                VSize -= (HEIGHT - SIT_HEIGHT) / TO_SIT_TIME;
+            if (Action == ACTIONS.SQUAT_LEFT) {
+                Position += new Vector2(-1f / SQUAT_TIME, 0);
             }
-            if (Action == ACTIONS.SIT) {
-                if (state.Keyboard.IsKeyDown(Keys.W)) {
-                    Action = ACTIONS.FROM_SIT;
-                    Alarm = FROM_SIT_TIME;
-                }
+            if (Action == ACTIONS.SQUAT_RIGHT) {
+                Position += new Vector2(1f / SQUAT_TIME, 0);
             }
             if (Action == ACTIONS.FROM_SIT) {
                 VSize += (HEIGHT - SIT_HEIGHT) / FROM_SIT_TIME;

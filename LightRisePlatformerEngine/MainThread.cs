@@ -120,7 +120,7 @@ namespace LightRise.Main {
             Map.Draw(SpriteBatch, Cam);
             Player.Draw(SpriteBatch, Cam);
             SpriteBatch.End( );
-            spineObj.Draw(Cam);
+            //spineObj.Draw(Cam);
 
             base.Draw(gameTime);
         }
