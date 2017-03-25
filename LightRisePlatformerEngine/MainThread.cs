@@ -103,7 +103,7 @@ namespace LightRise.Main {
             float dx = (State.Keyboard.IsKeyDown(Keys.Right) ? cam_spd : 0) - (State.Keyboard.IsKeyDown(Keys.Left) ? cam_spd : 0);
             float dy = (State.Keyboard.IsKeyDown(Keys.Down) ? cam_spd : 0) - (State.Keyboard.IsKeyDown(Keys.Up) ? cam_spd : 0);
             Cam.Position = new Vector2(Cam.Position.X + dx, Cam.Position.Y + dy);
-            Player.hero.Update(gameTime);
+            Player.Hero.Update(gameTime);
 
             Player.Step(State);
             Cam.Position = Player.Position - Size.ToVector2( ) / Cam.Scale / 2f;

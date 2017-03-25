@@ -20,7 +20,8 @@ namespace LightRise.Main {
         public const uint GET_DOWN_TIME = 30;
         public const uint GET_UP_TIME = 60;
         public enum ACTIONS {
-            STAND,
+            STAND_LEFT,
+            STAND_RIGHT,
             WALK_LEFT,
             WALK_RIGHT,
             FALL,
@@ -33,8 +34,10 @@ namespace LightRise.Main {
             HANG_DOWN,
             GET_UP,
             JUMP_ON,
+            JUMP_LEFT,
+            JUMP_RIGHT,
         }
-        public ACTIONS Action = ACTIONS.STAND;
+        public ACTIONS Action = ACTIONS.STAND_LEFT;
 
         public uint Alarm = 0;
         public float VSpeed = 0f;
@@ -54,7 +57,7 @@ namespace LightRise.Main {
 
         public Vector2 Position;
 
-        public SpineObject hero;
+        public SpineObject Hero;
 
         public Player(Point position) {
             if (Collision(position)) {
@@ -64,7 +67,7 @@ namespace LightRise.Main {
         }
 
         public void SetHero(GraphicsDevice graphicDevice, float baseScale) {
-            hero = new SpineObject(graphicDevice, "Sample", baseScale, Position);
+            Hero = new SpineObject(graphicDevice, "Sample", baseScale, Position);
         }
 
         public static Map Map { get { return Program.MainThread.Map; } }
@@ -75,22 +78,22 @@ namespace LightRise.Main {
         }
 
         public void Draw(SpriteBatch surface, Camera camera) {
-            if (hero == null) {
+            if (Hero == null) {
                 surface.Draw(SimpleUtils.WhiteRect, new Rectangle(camera.WorldToWindow(Position.Add(0.5f) - new Vector2(WIDTH / 2f, VSize - 1.5f)), (new Vector2(WIDTH, VSize) * camera.Scale).ToPoint( )), Color.Green);
             } else {
-                hero.offset = new Vector2(camera.Scale.X / 2, camera.Scale.Y);
-                hero.Draw(camera);
+                Hero.offset = new Vector2(camera.Scale.X / 2, camera.Scale.Y);
+                Hero.Draw(camera);
             }
         }
 
         public void OnAlarm(StepState state) {
             switch (Action) {
             case ACTIONS.WALK_LEFT:
-                Action = ACTIONS.STAND;
+                Action = ACTIONS.STAND_LEFT;
                 GridPosition += new Point(-1, 0);
                 break;
             case ACTIONS.WALK_RIGHT:
-                Action = ACTIONS.STAND;
+                Action = ACTIONS.STAND_LEFT;
                 GridPosition += new Point(1, 0);
                 break;
             case ACTIONS.TO_SIT:
@@ -98,7 +101,7 @@ namespace LightRise.Main {
                 VSize = SIT_HEIGHT;
                 break;
             case ACTIONS.FROM_SIT:
-                Action = ACTIONS.STAND;
+                Action = ACTIONS.STAND_LEFT;
                 VSize = HEIGHT;
                 break;
             case ACTIONS.SQUAT_LEFT:
@@ -114,7 +117,7 @@ namespace LightRise.Main {
                 GridPosition += new Point(0, 2);
                 break;
             case ACTIONS.GET_UP:
-                Action = ACTIONS.STAND;
+                Action = ACTIONS.STAND_LEFT;
                 GridPosition += new Point(0, -2);
                 break;
             case ACTIONS.JUMP_ON:
@@ -138,7 +141,7 @@ namespace LightRise.Main {
             if (Action == ACTIONS.WALK_RIGHT) {
                 Position += new Vector2(1f / WALK_TIME, 0);
             }
-            if (Action == ACTIONS.STAND) {
+            if (Action == ACTIONS.STAND_LEFT) {
                 if (Map[GridPosition + new Point(0, 2)] == Map.EMPTY) {
                     Action = ACTIONS.FALL;
                 } else if (state.Keyboard.IsKeyDown(Keys.A) && !Collision(GridPosition + new Point(-1, 0))) {
@@ -211,7 +214,7 @@ namespace LightRise.Main {
                     GridPosition += new Point(0, 1);
                     if (Map[GridPosition + new Point(0, 2)] != Map.EMPTY) {
                         VSize = HEIGHT;
-                        Action = ACTIONS.STAND;
+                        Action = ACTIONS.STAND_LEFT;
                         VSpeed = 0f;
                     } else {
                         Position = pos;
@@ -227,8 +230,8 @@ namespace LightRise.Main {
             if (Action == ACTIONS.FROM_SIT) {
                 VSize += (HEIGHT - SIT_HEIGHT) / FROM_SIT_TIME;
             }
-            if (hero != null)
-                hero.pos = Position;
+            if (Hero != null)
+                Hero.pos = Position;
         }
     }
 }
