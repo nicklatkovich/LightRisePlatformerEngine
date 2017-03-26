@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace LightRise.BaseClasses {
     public abstract class Comp : Instance {
 
-        public bool inUse { get; protected set; }
+        public static bool inUse { get; set; }
         public Comp(Point position, GraphicsDevice device) : base(position, device) {
         }
 

@@ -37,7 +37,7 @@ namespace LightRise.Main {
         SpriteFont Font;
         Texture2D BG;
         public List<TextContainer> Words;
-        public List<TextObject> Items;
+        static public List<TextObject> Items = new List<TextObject>( );
         Rectangle savedItems;
 
         Tuple<TextObject, int, bool> DraggableText;
@@ -54,7 +54,6 @@ namespace LightRise.Main {
             Font = font;
             this.spriteBatch = spriteBatch;
             Words = new List<TextContainer>( );
-            Items = new List<TextObject>( );
             BG = terminal;
             //savedItems = new Rectangle(635, 130, 182, 375);
             savedItems = new Rectangle(530, 116, 182, 375);
@@ -72,7 +71,7 @@ namespace LightRise.Main {
             Point mousePos = State.Mouse.Position;
             if (DraggableText == null) {
                 if (State.Mouse.LeftButton == ButtonState.Pressed) {
-                    for (int i = 0; i < Words.Count && DraggableText == null && Words[i].textObject != null; i++) {
+                    for (int i = 0; i < Words.Count && DraggableText == null/* && Words[i].textObject != null*/; i++) {
                         Rectangle item = Words[i].Rect;
                         item.Offset(Pos);
                         if (item.Contains(mousePos) && Words[i].textObject.Draggable) {
