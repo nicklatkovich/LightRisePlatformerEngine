@@ -4,11 +4,13 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using Microsoft.Xna.Framework.Input;
 using LightRise.WinUtilsLib;
+using System.Collections.Generic;
 
 namespace LightRise.Main
 {
     class Player : IInstance
     {
+        public List<SpriteFont> Items;
 
         public const float WIDTH = 0.8f;
         public const float HEIGHT = 1.6f;
@@ -71,6 +73,7 @@ namespace LightRise.Main
                 throw new Exception("Incorrect initial coordinates of the player");
             }
             GridPosition = position;
+            Items = new List<SpriteFont>();
         }
 
         public void SetHero(GraphicsDevice graphicDevice, float baseScale) {

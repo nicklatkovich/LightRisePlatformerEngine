@@ -11,7 +11,7 @@ namespace LightRise.Main
 {
     class FirstHack : HackScreen
     {
-        public FirstHack(SpriteFont font, SpriteBatch spriteBatch, Texture2D terminal) : base (font, spriteBatch, terminal)
+        public FirstHack(SpriteFont font, SpriteBatch spriteBatch, Texture2D terminal, List<TextObject> items) : base (font, spriteBatch, terminal)
         {
             HackScreen.TextContainer word = new HackScreen.TextContainer(new Rectangle(112, 50, 225, 93));
             TextObject textObj = new TextObject(font, "bool AllowToGo() {\n  return        ;\n }");
@@ -33,6 +33,7 @@ namespace LightRise.Main
             word.textObject = textObj;
             textObj.Draggable = true;
             Words.Add(word);
+            items = items;
         }
 
         public void Update(GameTime gameTime, StepState State)
