@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using LightRise.BaseClasses;
 
@@ -17,7 +12,8 @@ namespace LightRise.Main {
         }
 
         public override void Connect( ) {
-            Program.MainThread.GUIes.Add(new FirstGUI(Program.MainThread.GraphicsDevice, Program.MainThread.Graphics));
+            base.Connect( );
+            Program.MainThread.HackScreen = new FirstHack(Program.MainThread.HackFont, Program.MainThread.SpriteBatch, Program.MainThread.Terminal);
         }
 
         public override void Draw(SpriteBatch surface, Camera camera) {

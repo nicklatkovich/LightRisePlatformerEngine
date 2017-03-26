@@ -196,7 +196,7 @@ namespace LightRise.Main
                             foreach (var a in Program.MainThread.Instances) {
                                 Point diff = a.GridPosition - GridPosition;
                                 if (diff.Y == 0 && Math.Abs(diff.X) <= 1) {
-                                    if (a is Comp) {
+                                    if (a is Comp && (a as Comp).inUse == false) {
                                         (a as Comp).Connect( );
                                         Locked = true;
                                         break;
@@ -271,20 +271,6 @@ namespace LightRise.Main
                     Hero.pos = Position;
                 }
             }
-            if (Action == ACTIONS.SQUAT_LEFT)
-            {
-                Position += new Vector2(-1f / SQUAT_TIME, 0);
-            }
-            if (Action == ACTIONS.SQUAT_RIGHT)
-            {
-                Position += new Vector2(1f / SQUAT_TIME, 0);
-            }
-            if (Action == ACTIONS.FROM_SIT)
-            {
-                VSize += (HEIGHT - SIT_HEIGHT) / FROM_SIT_TIME;
-            }
-            if (Hero != null)
-            { Hero.pos = Position; }
         }
     }
 }
