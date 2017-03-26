@@ -14,7 +14,7 @@ namespace LightRise.Main {
     public class MainThread : Game {
 
         public GraphicsDeviceManager Graphics { get; protected set; }
-        SpriteBatch SpriteBatch;
+        public SpriteBatch SpriteBatch;
         SpineObject SpineInstance;
 
         public List<Instance> Instances = new List<Instance>( );
@@ -24,7 +24,9 @@ namespace LightRise.Main {
         public Map Map { get; protected set; }
         Camera Cam;
         public Player Player { get; protected set; }
-        HackScreen hackScreen;
+        public HackScreen HackScreen;
+        public SpriteFont HackFont;
+        public Texture2D Terminal;
 
         public MainThread( ) {
             Graphics = new GraphicsDeviceManager(this);
@@ -77,7 +79,8 @@ namespace LightRise.Main {
             // Create a new SpriteBatch, which can be used to draw textures.
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             SpineInstance = new SpineObject(GraphicsDevice, "Sample", 1, new Vector2(20, 10));
-            hackScreen = new FirstHack(Content.Load<SpriteFont>("HackFont"), SpriteBatch, Content.Load<Texture2D>("Terminal"));
+            HackFont = Content.Load<SpriteFont>("HackFont");
+            Terminal = Content.Load<Texture2D>("Terminal");
 
             // TODO: use this.Content to load your game content here
         }
@@ -109,8 +112,8 @@ namespace LightRise.Main {
 
             Player.Step(State);
             Cam.Position = Player.Position - Size.ToVector2( ) / Cam.Scale / 2f;
-            if (hackScreen != null)
-                hackScreen.Update(gameTime, State);
+            if (HackScreen != null)
+                HackScreen.Update(gameTime, State);
 
             try {
                 foreach (var a in Instances) {
@@ -153,8 +156,8 @@ namespace LightRise.Main {
             Map.Draw(SpriteBatch, Cam);
             SpriteBatch.End( );
             //spineObj.Draw(Cam);
-            if (hackScreen != null)
-                hackScreen.Draw(Cam);
+            if (HackScreen != null)
+                HackScreen.Draw(Cam);
 
             base.Draw(gameTime);
         }
