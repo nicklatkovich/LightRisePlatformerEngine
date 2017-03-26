@@ -15,7 +15,10 @@ namespace LightRise.Main {
 
         public GraphicsDeviceManager Graphics { get; protected set; }
         SpriteBatch SpriteBatch;
+<<<<<<< HEAD
         SpineObject SpineInstance;
+=======
+>>>>>>> pr/6
 
         public List<Instance> Instances = new List<Instance>( );
         public List<Instance> GUIes = new List<Instance>( );
@@ -23,7 +26,12 @@ namespace LightRise.Main {
         RenderTarget2D[ ] Renders;
         public Map Map { get; protected set; }
         Camera Cam;
+<<<<<<< HEAD
         public Player Player { get; protected set; }
+=======
+        Player Player;
+        HackScreen hackScreen;
+>>>>>>> pr/6
 
         public MainThread( ) {
             Graphics = new GraphicsDeviceManager(this);
@@ -75,7 +83,11 @@ namespace LightRise.Main {
         protected override void LoadContent( ) {
             // Create a new SpriteBatch, which can be used to draw textures.
             SpriteBatch = new SpriteBatch(GraphicsDevice);
+<<<<<<< HEAD
             SpineInstance = new SpineObject(GraphicsDevice, "Sample", 1, new Vector2(20, 10));
+=======
+            hackScreen = new FirstHack(Content.Load<SpriteFont>("HackFont"), SpriteBatch, Content.Load<Texture2D>("Terminal"));
+>>>>>>> pr/6
 
             // TODO: use this.Content to load your game content here
         }
@@ -107,6 +119,7 @@ namespace LightRise.Main {
 
             Player.Step(State);
             Cam.Position = Player.Position - Size.ToVector2( ) / Cam.Scale / 2f;
+            hackScreen.Update(gameTime, State);
 
             try {
                 foreach (var a in Instances) {
@@ -129,6 +142,7 @@ namespace LightRise.Main {
 
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographic(Cam.Scale.X, Cam.Scale.Y, -0.1f, 1f));
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographicOffCenter(new Rectangle((int)(Cam.Position.X - Cam.Scale.X / 2), (int)(Cam.Position.Y - Cam.Scale.Y / 2), (int)Cam.Scale.X, (int)Cam.Scale.Y), 1f, 1000f));
+<<<<<<< HEAD
             SpriteBatch.Begin( );
             Map.Draw(SpriteBatch, Cam);
             foreach (var a in Instances) {
@@ -145,7 +159,14 @@ namespace LightRise.Main {
                 a.Draw(SpriteBatch, Cam);
             }
             SpriteBatch.End( );
+=======
+            SpriteBatch.Begin();
+            //Map.Draw(SpriteBatch, Cam);
+            SpriteBatch.End( );
+            //Player.Draw(SpriteBatch, Cam);
+>>>>>>> pr/6
             //spineObj.Draw(Cam);
+            hackScreen.Draw(Cam);
 
             base.Draw(gameTime);
         }

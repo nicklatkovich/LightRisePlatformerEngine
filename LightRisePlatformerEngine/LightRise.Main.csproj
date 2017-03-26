@@ -57,9 +57,15 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Compile Include="FirstComp.cs" />
     <Compile Include="FirstGUI.cs" />
     <Compile Include="GUI.cs" />
+=======
+    <Compile Include="FirstHack.cs" />
+    <Compile Include="HackScreen.cs" />
+    <Compile Include="IInstance.cs" />
+>>>>>>> pr/6
     <Compile Include="MainThread.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
