@@ -62,7 +62,6 @@
     <Compile Include="GUI.cs" />
     <Compile Include="FirstHack.cs" />
     <Compile Include="HackScreen.cs" />
-    <Compile Include="IInstance.cs" />
     <Compile Include="MainThread.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
