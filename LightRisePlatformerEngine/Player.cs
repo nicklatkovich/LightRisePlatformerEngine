@@ -5,15 +5,15 @@ using System;
 using Microsoft.Xna.Framework.Input;
 using LightRise.WinUtilsLib;
 
-namespace LightRise.Main
-{
-    class Player : IInstance
-    {
+namespace LightRise.Main {
+    public class Player {
 
         public const float WIDTH = 0.8f;
         public const float HEIGHT = 1.6f;
         public const float GRAVITY = 0.02f;
         public const float SIT_HEIGHT = 0.9f;
+
+        public bool Locked = false;
 
         public const uint WALK_TIME = 20;
         public const uint TO_SIT_TIME = 10;
@@ -39,6 +39,7 @@ namespace LightRise.Main
             JUMP_LEFT,
             JUMP_RIGHT,
         }
+        public ACTIONS ActionPrevious = ACTIONS.STAND_LEFT;
         public ACTIONS Action = ACTIONS.STAND_LEFT;
 
         public uint Alarm = 0;
@@ -46,17 +47,14 @@ namespace LightRise.Main
         public float VSize = HEIGHT;
 
         private Point _gridPosition;
-        public Point GridPosition
-        {
+        public Point GridPosition {
             get { return _gridPosition; }
-            set
-            {
-                if (value == null)
-                {
-                    throw new NullReferenceException();
+            set {
+                if (value == null) {
+                    throw new NullReferenceException( );
                 }
                 _gridPosition = value;
-                Position = GridPosition.ToVector2();
+                Position = GridPosition.ToVector2( );
             }
         }
 
@@ -64,10 +62,8 @@ namespace LightRise.Main
 
         public SpineObject Hero;
 
-        public Player(Point position)
-        {
-            if (Collision(position))
-            {
+        public Player(Point position) {
+            if (Collision(position)) {
                 throw new Exception("Incorrect initial coordinates of the player");
             }
             GridPosition = position;
@@ -80,8 +76,7 @@ namespace LightRise.Main
 
         public static Map Map { get { return Program.MainThread.Map; } }
 
-        public static bool Collision(Point position)
-        {
+        public static bool Collision(Point position) {
             return
                 Map[position] == Map.WALL;
         }
@@ -99,12 +94,10 @@ namespace LightRise.Main
             switch (Action) {
             case ACTIONS.WALK_LEFT:
                 Action = ACTIONS.STAND_LEFT;
-                Hero.State.SetAnimation(0, "стоять ", true);
                 GridPosition += new Point(-1, 0);
                 break;
             case ACTIONS.WALK_RIGHT:
                 Action = ACTIONS.STAND_LEFT;
-                Hero.State.SetAnimation(0, "стоять ", true);
                 GridPosition += new Point(1, 0);
                 break;
             case ACTIONS.TO_SIT:
@@ -139,141 +132,142 @@ namespace LightRise.Main
             }
         }
 
-        public void Step(StepState state)
-        {
-            if (Alarm > 0)
-            {
-                Alarm--;
-                if (Alarm == 0)
-                {
-                    OnAlarm(state);
+        public void Step(StepState state) {
+            if (!Locked) {
+                ActionPrevious = Action;
+                if (Alarm > 0) {
+                    Alarm--;
+                    if (Alarm == 0) {
+                        OnAlarm(state);
+                    }
                 }
-            }
-            if (Action == ACTIONS.WALK_LEFT)
-            {
-                Position += new Vector2(-1f / WALK_TIME, 0);
-            }
-            if (Action == ACTIONS.WALK_RIGHT)
-            {
-                Position += new Vector2(1f / WALK_TIME, 0);
-            }
-            if (Action == ACTIONS.STAND_LEFT) {
-                if (Map[GridPosition + new Point(0, 2)] == Map.EMPTY) {
-                    Action = ACTIONS.FALL;
+                if (Action == ACTIONS.WALK_LEFT) {
+                    Position += new Vector2(-1f / WALK_TIME, 0);
                 }
-                else if (state.Keyboard.IsKeyDown(Keys.A) && !Collision(GridPosition + new Point(-1, 0)))
-                {
-                    Action = ACTIONS.WALK_LEFT;
-                    Alarm = WALK_TIME;
-                    Hero.State.SetAnimation(0, "бег", true);
+                if (Action == ACTIONS.WALK_RIGHT) {
+                    Position += new Vector2(1f / WALK_TIME, 0);
+                }
+                if (Action == ACTIONS.STAND_LEFT) {
+                    if (Map[GridPosition + new Point(0, 2)] == Map.EMPTY) {
+                        Action = ACTIONS.FALL;
+                    } else if (state.Keyboard.IsKeyDown(Keys.A) && !Collision(GridPosition + new Point(-1, 0))) {
+                        Action = ACTIONS.WALK_LEFT;
+                        if (ActionPrevious != ACTIONS.WALK_LEFT) {
+                            Hero.State.SetAnimation(0, "бег", true);
+                            Hero.Skeleton.FlipX = false;
+                        }
+                        Alarm = WALK_TIME;
+                    } else if (state.Keyboard.IsKeyDown(Keys.D) && !Collision(GridPosition + new Point(1, 0))) {
+                        Action = ACTIONS.WALK_RIGHT;
+                        if (ActionPrevious != ACTIONS.WALK_RIGHT) {
+                            Hero.State.SetAnimation(0, "бег", true);
+                            Hero.Skeleton.FlipX = true;
+                        }
+                        Alarm = WALK_TIME;
+                    } else {
+                        Hero.State.SetAnimation(0, "стоять ", true);
+
+                        if (state.Keyboard.IsKeyDown(Keys.S)) {
+                            Point temp = GridPosition + new Point(0, 2);
+                            if (Map[temp] == Map.LEFT_SHELF ||
+                                Map[temp] == Map.RIGHT_SHELF) {
+                                Action = ACTIONS.GET_DOWN;
+                                Alarm = GET_DOWN_TIME;
+                            } else {
+                                Action = ACTIONS.TO_SIT;
+                                Alarm = TO_SIT_TIME;
+                                Hero.State.SetAnimation(0, "присесть ", false);
+                            }
+                        } else if (state.Keyboard.IsKeyDown(Keys.W)) {
+                            Point temp = GridPosition + new Point(0, -2);
+                            if (Map[temp] == Map.LEFT_SHELF || Map[temp] == Map.RIGHT_SHELF) {
+                                Action = ACTIONS.JUMP_ON;
+                                uint h = 2u;
+                                float t = (float)Math.Sqrt(2f * h / GRAVITY);
+                                VSpeed = -GRAVITY * t;
+                                Alarm = (uint)Math.Floor(t);
+                            }
+                        } else if (state.Keyboard.IsKeyDown(Keys.E)) {
+                            foreach (var a in Program.MainThread.Instances) {
+                                Point diff = a.GridPosition - GridPosition;
+                                if (diff.Y == 0 && Math.Abs(diff.X) <= 1) {
+                                    if (a is Comp) {
+                                        (a as Comp).Connect( );
+                                        Locked = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (Action == ACTIONS.JUMP_ON) {
+                    Position += new Vector2(0, VSpeed);
+                    VSpeed += GRAVITY;
+                }
+                if (Action == ACTIONS.GET_DOWN) {
+                    Position += new Vector2(0, 2f / GET_DOWN_TIME);
+                }
+                if (Action == ACTIONS.TO_SIT) {
+                    VSize -= (HEIGHT - SIT_HEIGHT) / TO_SIT_TIME;
+                }
+                if (Action == ACTIONS.SIT) {
+                    if (Map[GridPosition + new Point(0, 2)] == Map.EMPTY) {
+                        Action = ACTIONS.FALL;
+                    } else if (state.Keyboard.IsKeyDown(Keys.W) && !Collision(GridPosition)) {
+                        Action = ACTIONS.FROM_SIT;
+                        Alarm = FROM_SIT_TIME;
+                    } else if (state.Keyboard.IsKeyDown(Keys.A) && !Collision(GridPosition + new Point(-1, 1))) {
+                        Action = ACTIONS.SQUAT_LEFT;
+                        Alarm = SQUAT_TIME;
+                    } else if (state.Keyboard.IsKeyDown(Keys.D) && !Collision(GridPosition + new Point(1, 1))) {
+                        Action = ACTIONS.SQUAT_RIGHT;
+                        Alarm = SQUAT_TIME;
+                    }
+                }
+                if (Action == ACTIONS.HANG_DOWN) {
+                    if (state.Keyboard.IsKeyDown(Keys.S)) {
+                        Action = ACTIONS.FALL;
+                    } else if (state.Keyboard.IsKeyDown(Keys.W)) {
+                        Action = ACTIONS.GET_UP;
+                        Alarm = GET_UP_TIME;
+                    }
+                }
+                if (Action == ACTIONS.GET_UP) {
+                    Position += new Vector2(0, -2f / GET_UP_TIME);
+                }
+                if (Action == ACTIONS.FALL) {
+                    VSpeed = Math.Min(2, VSpeed + GRAVITY);
+                    Position += new Vector2(0f, VSpeed);
+                    if (Position.Y - GridPosition.Y > 1f) {
+                        Vector2 pos = Position;
+                        GridPosition += new Point(0, 1);
+                        if (Map[GridPosition + new Point(0, 2)] != Map.EMPTY) {
+                            VSize = HEIGHT;
+                            Action = ACTIONS.STAND_LEFT;
+                            VSpeed = 0f;
+                        } else {
+                            Position = pos;
+                        }
+                    }
+                }
+                if (Action == ACTIONS.SQUAT_LEFT) {
+                    Position += new Vector2(-1f / SQUAT_TIME, 0);
                     Hero.Skeleton.FlipX = false;
                 }
-                else if (state.Keyboard.IsKeyDown(Keys.D) && !Collision(GridPosition + new Point(1, 0)))
-                {
-                    Action = ACTIONS.WALK_RIGHT;
-                    Alarm = WALK_TIME;
-                    Hero.State.SetAnimation(0, "бег", true);
+                if (Action == ACTIONS.SQUAT_RIGHT) {
+                    Position += new Vector2(1f / SQUAT_TIME, 0);
                     Hero.Skeleton.FlipX = true;
                 }
-                else if (state.Keyboard.IsKeyDown(Keys.S))
-                {
-                    Point temp = GridPosition + new Point(0, 2);
-                    if (Map[temp] == Map.LEFT_SHELF ||
-                        Map[temp] == Map.RIGHT_SHELF)
-                    {
-                        Action = ACTIONS.GET_DOWN;
-                        Alarm = GET_DOWN_TIME;
-                    }
-                    else
-                    {
-                        Action = ACTIONS.TO_SIT;
-                        Alarm = TO_SIT_TIME;
-                    }
+                if (Action == ACTIONS.FROM_SIT) {
+                    VSize += (HEIGHT - SIT_HEIGHT) / FROM_SIT_TIME;
                 }
-                else if (state.Keyboard.IsKeyDown(Keys.W))
-                {
-                    Point temp = GridPosition + new Point(0, -2);
-                    if (Map[temp] == Map.LEFT_SHELF || Map[temp] == Map.RIGHT_SHELF)
-                    {
-                        Action = ACTIONS.JUMP_ON;
-                        uint h = 2u;
-                        float t = (float)Math.Sqrt(2f * h / GRAVITY);
-                        VSpeed = -GRAVITY * t;
-                        Alarm = (uint)Math.Floor(t);
-                    }
+                if (Hero != null) {
+                    Hero.pos = Position;
                 }
             }
-            if (Action == ACTIONS.JUMP_ON)
-            {
-                Position += new Vector2(0, VSpeed);
-                VSpeed += GRAVITY;
-            }
-            if (Action == ACTIONS.GET_DOWN)
-            {
-                Position += new Vector2(0, 2f / GET_DOWN_TIME);
-            }
-            if (Action == ACTIONS.TO_SIT)
-            {
-                VSize -= (HEIGHT - SIT_HEIGHT) / TO_SIT_TIME;
-            }
-            if (Action == ACTIONS.SIT)
-            {
-                if (Map[GridPosition + new Point(0, 2)] == Map.EMPTY)
-                {
-                    Action = ACTIONS.FALL;
-                }
-                else if (state.Keyboard.IsKeyDown(Keys.W) && !Collision(GridPosition))
-                {
-                    Action = ACTIONS.FROM_SIT;
-                    Alarm = FROM_SIT_TIME;
-                }
-                else if (state.Keyboard.IsKeyDown(Keys.A) && !Collision(GridPosition + new Point(-1, 1)))
-                {
-                    Action = ACTIONS.SQUAT_LEFT;
-                    Alarm = SQUAT_TIME;
-                }
-                else if (state.Keyboard.IsKeyDown(Keys.D) && !Collision(GridPosition + new Point(1, 1)))
-                {
-                    Action = ACTIONS.SQUAT_RIGHT;
-                    Alarm = SQUAT_TIME;
-                }
-            }
-            if (Action == ACTIONS.HANG_DOWN)
-            {
-                if (state.Keyboard.IsKeyDown(Keys.S))
-                {
-                    Action = ACTIONS.FALL;
-                }
-                else if (state.Keyboard.IsKeyDown(Keys.W))
-                {
-                    Action = ACTIONS.GET_UP;
-                    Alarm = GET_UP_TIME;
-                }
-            }
-            if (Action == ACTIONS.GET_UP)
-            {
-                Position += new Vector2(0, -2f / GET_UP_TIME);
-            }
-            if (Action == ACTIONS.FALL)
-            {
-                VSpeed = Math.Min(2, VSpeed + GRAVITY);
-                Position += new Vector2(0f, VSpeed);
-                if (Position.Y - GridPosition.Y > 1f)
-                {
-                    Vector2 pos = Position;
-                    GridPosition += new Point(0, 1);
-                    if (Map[GridPosition + new Point(0, 2)] != Map.EMPTY)
-                    {
-                        VSize = HEIGHT;
-                        Action = ACTIONS.STAND_LEFT;
-                        VSpeed = 0f;
-                    }
-                    else
-                    {
-                        Position = pos;
-                    }
-                }
-            }
+<<<<<<< HEAD
+=======
             if (Action == ACTIONS.SQUAT_LEFT)
             {
                 Position += new Vector2(-1f / SQUAT_TIME, 0);
@@ -288,6 +282,7 @@ namespace LightRise.Main
             }
             if (Hero != null)
             { Hero.pos = Position; }
+>>>>>>> pr/6
         }
     }
 }
