@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="FirstComp.cs" />
     <Compile Include="FirstGUI.cs" />
+    <Compile Include="MainMenu.cs" />
     <Compile Include="SecondHack.cs" />
     <Compile Include="GUI.cs" />
     <Compile Include="FirstHack.cs" />

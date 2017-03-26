@@ -1,11 +1,13 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 using LightRise.BaseClasses;
 using LightRise.WinUtilsLib;
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Audio;
 
 namespace LightRise.Main {
     /// <summary>
@@ -38,6 +40,7 @@ namespace LightRise.Main {
         public Texture2D Terminal;
         Door Door1;
         Door Door2;
+        MainMenu mainMenu;
 
         public MainThread( ) {
             Graphics = new GraphicsDeviceManager(this);
@@ -107,6 +110,7 @@ namespace LightRise.Main {
             (Instances[1] as Comp).texture = computerTex;
             Door1 = new Door(doorText, Player.GridPosition + new Point(26, -1), Instances[0] as Comp, Map);
             Door2 = new Door(doorText, Player.GridPosition + new Point(3, -1), Instances[1] as Comp, Map);
+            Player.pick = Content.Load<SoundEffect>("Pick");
             (Instances[0] as Comp).Allowed = true;
             script1 = delegate ()
             {
@@ -122,7 +126,10 @@ namespace LightRise.Main {
                 finishColor.A = 0;
             };
             Player.GridPosition += new Point(4, 0);
-
+            mainMenu = new MainMenu(Content.Load<Texture2D>("mainMenu"));
+            MediaPlayer.Play(Content.Load<Song>("Music"));
+            MediaPlayer.Volume = 0.6f;
+            MediaPlayer.IsRepeating = true;
             // TODO: use this.Content to load your game content here
         }
 
@@ -139,42 +146,52 @@ namespace LightRise.Main {
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime) {
-            StepState State = new StepState(gameTime, Keyboard.GetState( ), Mouse.GetState( ));
-
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed /*|| State.Keyboard.IsKeyDown(Keys.Escape)*/)
-                Exit( );
-
-            float cam_spd = 0.1f;
-            float dx = (State.Keyboard.IsKeyDown(Keys.Right) ? cam_spd : 0) - (State.Keyboard.IsKeyDown(Keys.Left) ? cam_spd : 0);
-            float dy = (State.Keyboard.IsKeyDown(Keys.Down) ? cam_spd : 0) - (State.Keyboard.IsKeyDown(Keys.Up) ? cam_spd : 0);
-            Cam.Position = new Vector2(Cam.Position.X + dx, Cam.Position.Y + dy);
-            Player.Hero.Update(gameTime);
-
-            Player.Step(State);
-            if (Player.GridPosition.X > 38 && script1 != null)
+        protected override void Update(GameTime gameTime)
+        {
+            StepState State = new StepState(gameTime, Keyboard.GetState(), Mouse.GetState());
+            if (mainMenu == null)
             {
-                script1();
-                script1 = null;
-            }
-            if (Player.GridPosition.X < 12 && script3 != null)
-            {
-                script3();
-                script3 = null;
-            }
-            Cam.Position = Player.Position - Size.ToVector2( ) / Cam.Scale / 2f;
-            if (HackScreen != null)
-                HackScreen.Update(gameTime, State);
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed /*|| State.Keyboard.IsKeyDown(Keys.Escape)*/)
+                    Exit();
 
-            try {
-                foreach (var a in Instances) {
-                    a.Update(State);
-                }
-                foreach (var a in GUIes) {
-                    a.Update(State);
-                }
-            } catch { }
+                float cam_spd = 0.1f;
+                float dx = (State.Keyboard.IsKeyDown(Keys.Right) ? cam_spd : 0) - (State.Keyboard.IsKeyDown(Keys.Left) ? cam_spd : 0);
+                float dy = (State.Keyboard.IsKeyDown(Keys.Down) ? cam_spd : 0) - (State.Keyboard.IsKeyDown(Keys.Up) ? cam_spd : 0);
+                Cam.Position = new Vector2(Cam.Position.X + dx, Cam.Position.Y + dy);
+                Player.Hero.Update(gameTime);
 
+                Player.Step(State);
+                if (Player.GridPosition.X > 38 && script1 != null)
+                {
+                    script1();
+                    script1 = null;
+                }
+                if (Player.GridPosition.X < 12 && script3 != null)
+                {
+                    script3();
+                    script3 = null;
+                }
+                Cam.Position = Player.Position - Size.ToVector2() / Cam.Scale / 2f;
+                if (HackScreen != null)
+                    HackScreen.Update(gameTime, State);
+
+                try
+                {
+                    foreach (var a in Instances)
+                    {
+                        a.Update(State);
+                    }
+                    foreach (var a in GUIes)
+                    {
+                        a.Update(State);
+                    }
+                }
+                catch { }
+
+            }
+            else
+                if (State.Keyboard.GetPressedKeys().Length > 0)
+                mainMenu = null;
             base.Update(gameTime);
         }
 
@@ -182,42 +199,52 @@ namespace LightRise.Main {
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime) {
+        protected override void Draw(GameTime gameTime)
+        {
             GraphicsDevice.Clear(Color.Black);
-
-            //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographic(Cam.Scale.X, Cam.Scale.Y, -0.1f, 1f));
-            //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographicOffCenter(new Rectangle((int)(Cam.Position.X - Cam.Scale.X / 2), (int)(Cam.Position.Y - Cam.Scale.Y / 2), (int)Cam.Scale.X, (int)Cam.Scale.Y), 1f, 1000f));
-            SpriteBatch.Begin( );
-            SpriteBatch.Draw(Back, new Rectangle(Cam.WorldToWindow(new Point(9, 1).ToVector2( )), (new Point(80, 34).ToVector2( ) * Cam.Scale / 2f).ToPoint( )), Color.White);
-            //Map.Draw(SpriteBatch, Cam);
-            Door1.Draw(SpriteBatch, Cam);
-            Door2.Draw(SpriteBatch, Cam);
-            foreach (var a in Instances) {
-                a.Draw(SpriteBatch, Cam);
-            }
-            if (BigDoor != null)
-                SpriteBatch.Draw(BigDoor, new Rectangle(Cam.WorldToWindow(new Vector2(11f, 6.7f)), (Cam.Scale * 2.3f).ToPoint()), Color.White);
-            try {
-                SpriteBatch.End( );
-            } catch (InvalidOperationException) { }
-            Player.Draw(SpriteBatch, Cam);
-
-            SpriteBatch.Begin( );
-            foreach (var a in GUIes) {
-                a.Draw(SpriteBatch, Cam);
-            }
-            SpriteBatch.End( );
-            if (HackScreen != null)
-                HackScreen.Draw(Cam);
-            if (Finish)
+            if (mainMenu == null)
             {
+                //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographic(Cam.Scale.X, Cam.Scale.Y, -0.1f, 1f));
+                //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographicOffCenter(new Rectangle((int)(Cam.Position.X - Cam.Scale.X / 2), (int)(Cam.Position.Y - Cam.Scale.Y / 2), (int)Cam.Scale.X, (int)Cam.Scale.Y), 1f, 1000f));
                 SpriteBatch.Begin();
-                //if (finishColor.A < 100) finishColor.A++;
-                SpriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(0, 0, SpriteBatch.GraphicsDevice.Viewport.Width, SpriteBatch.GraphicsDevice.Viewport.Height), Color.Black);
-                SpriteBatch.DrawString(HackFont, "Demo version finished", Vector2.One * 50, Color.Green);
+                SpriteBatch.Draw(Back, new Rectangle(Cam.WorldToWindow(new Point(9, 1).ToVector2()), (new Point(80, 34).ToVector2() * Cam.Scale / 2f).ToPoint()), Color.White);
+                //Map.Draw(SpriteBatch, Cam);
+                Door1.Draw(SpriteBatch, Cam);
+                Door2.Draw(SpriteBatch, Cam);
+                foreach (var a in Instances)
+                {
+                    a.Draw(SpriteBatch, Cam);
+                }
+                if (BigDoor != null)
+                    SpriteBatch.Draw(BigDoor, new Rectangle(Cam.WorldToWindow(new Vector2(11f, 6.7f)), (Cam.Scale * 2.3f).ToPoint()), Color.White);
+                try
+                {
+                    SpriteBatch.End();
+                }
+                catch (InvalidOperationException) { }
+                Player.Draw(SpriteBatch, Cam);
+
+                SpriteBatch.Begin();
+                foreach (var a in GUIes)
+                {
+                    a.Draw(SpriteBatch, Cam);
+                }
                 SpriteBatch.End();
+                if (HackScreen != null)
+                    HackScreen.Draw(Cam);
+                if (Finish)
+                {
+                    SpriteBatch.Begin();
+                    //if (finishColor.A < 100) finishColor.A++;
+                    SpriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(0, 0, SpriteBatch.GraphicsDevice.Viewport.Width, SpriteBatch.GraphicsDevice.Viewport.Height), Color.Black);
+                    SpriteBatch.DrawString(HackFont, "Demo version finished", Vector2.One * 50, Color.Green);
+                    SpriteBatch.End();
+                }
             }
+            else
+                mainMenu.Draw(SpriteBatch);
             base.Draw(gameTime);
+
         }
     }
 }

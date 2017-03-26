@@ -5,13 +5,14 @@ using System;
 using Microsoft.Xna.Framework.Input;
 using LightRise.WinUtilsLib;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Audio;
 
 namespace LightRise.Main
 {
     public class Player : IInstance
     {
         public List<TextObject> Items;
-
+        public SoundEffect pick;
         public const bool LEFT = false;
         public const bool RIGHT = true;
 
@@ -204,6 +205,8 @@ namespace LightRise.Main
                                     if (a is Comp && Comp.inUse == false) {
                                         (a as Comp).Connect( );
                                         Locked = true;
+                                        if (pick != null)
+                                            pick.Play();
                                         break;
                                     }
                                 }
