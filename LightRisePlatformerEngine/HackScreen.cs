@@ -88,7 +88,7 @@ namespace LightRise.Main
             {
                 if (State.Mouse.LeftButton == ButtonState.Pressed)
                 {
-                    for (int i = 0; i < Words.Count && DraggableText == null && Words[i].textObject != null; i++)
+                    for (int i = 0; i < Words.Count && DraggableText == null; i++)
                     {
                         Rectangle item = Words[i].Rect;
                         item.Offset(Pos);

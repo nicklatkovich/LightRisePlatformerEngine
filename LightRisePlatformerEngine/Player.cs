@@ -10,7 +10,7 @@ namespace LightRise.Main
 {
     public class Player : IInstance
     {
-        public List<SpriteFont> Items;
+        public List<TextObject> Items;
 
         public const float WIDTH = 0.8f;
         public const float HEIGHT = 1.6f;
@@ -71,7 +71,7 @@ namespace LightRise.Main
                 throw new Exception("Incorrect initial coordinates of the player");
             }
             GridPosition = position;
-            Items = new List<SpriteFont>();
+            Items = new List<TextObject>();
         }
 
         public void SetHero(GraphicsDevice graphicDevice, float baseScale) {

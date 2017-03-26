@@ -77,7 +77,7 @@ namespace LightRise.Main {
             // Create a new SpriteBatch, which can be used to draw textures.
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             SpineInstance = new SpineObject(GraphicsDevice, "Sample", 1, new Vector2(20, 10));
-            hackScreen = new FirstHack(Content.Load<SpriteFont>("HackFont"), SpriteBatch, Content.Load<Texture2D>("Terminal"));
+            hackScreen = new SecondHack(Content.Load<SpriteFont>("HackFont"), SpriteBatch, Content.Load<Texture2D>("Terminal"), Player.Items);
 
             // TODO: use this.Content to load your game content here
         }

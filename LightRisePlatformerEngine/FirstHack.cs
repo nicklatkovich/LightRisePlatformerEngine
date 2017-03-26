@@ -33,7 +33,7 @@ namespace LightRise.Main
             word.textObject = textObj;
             textObj.Draggable = true;
             Words.Add(word);
-            items = items;
+            this.Items = items;
         }
 
         public void Update(GameTime gameTime, StepState State)
