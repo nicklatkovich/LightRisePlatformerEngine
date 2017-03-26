@@ -15,6 +15,10 @@ namespace LightRise.BaseClasses {
             WhiteRect.SetData(new Color[ ] { Color.White });
         }
 
+        public static readonly int[ ] DX = new int[ ] { 1, 0, -1, 0 };
+        public static readonly int[ ] DY = new int[ ] { 0, -1, 0, 1 };
+        public static readonly int[ ] DS = new int[ ] { 2, 3, 5, 7 };
+
         static SimpleUtils( ) {
         }
 
@@ -50,6 +54,8 @@ namespace LightRise.BaseClasses {
         }
 
         public static float Random { get { return (float)_rand.NextDouble( ); } }
+
+        public static int Rand { get { return _rand.Next( ); } }
 
         public static Vector2 Vector2(this Point point) {
             return new Vector2(point.X, point.Y);
