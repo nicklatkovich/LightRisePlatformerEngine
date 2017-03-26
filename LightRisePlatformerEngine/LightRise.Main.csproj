@@ -57,14 +57,19 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+<<<<<<< HEAD
+    <Compile Include="FirstComp.cs" />
+    <Compile Include="FirstGUI.cs" />
+    <Compile Include="GUI.cs" />
+=======
     <Compile Include="FirstHack.cs" />
     <Compile Include="HackScreen.cs" />
     <Compile Include="IInstance.cs" />
+>>>>>>> pr/6
     <Compile Include="MainThread.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StepState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
