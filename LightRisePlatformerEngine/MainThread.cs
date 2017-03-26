@@ -16,12 +16,12 @@ namespace LightRise.Main
 
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
-        SpineObject spineObj;
 
         RenderTarget2D[] Renders;
         public Map Map { get; protected set; }
         Camera Cam;
         Player Player;
+        HackScreen hackScreen;
 
         public MainThread()
         {
@@ -75,7 +75,7 @@ namespace LightRise.Main
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            spineObj = new SpineObject(GraphicsDevice, "Sample", 1, new Vector2(20, 10));
+            hackScreen = new FirstHack(Content.Load<SpriteFont>("HackFont"), SpriteBatch, Content.Load<Texture2D>("Terminal"));
 
             // TODO: use this.Content to load your game content here
         }
@@ -109,6 +109,7 @@ namespace LightRise.Main
 
             Player.Step(State);
             Cam.Position = Player.Position - Size.ToVector2( ) / Cam.Scale / 2f;
+            hackScreen.Update(gameTime, State);
 
             base.Update(gameTime);
         }
@@ -124,10 +125,11 @@ namespace LightRise.Main
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographic(Cam.Scale.X, Cam.Scale.Y, -0.1f, 1f));
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographicOffCenter(new Rectangle((int)(Cam.Position.X - Cam.Scale.X / 2), (int)(Cam.Position.Y - Cam.Scale.Y / 2), (int)Cam.Scale.X, (int)Cam.Scale.Y), 1f, 1000f));
             SpriteBatch.Begin();
-            Map.Draw(SpriteBatch, Cam);
+            //Map.Draw(SpriteBatch, Cam);
             SpriteBatch.End( );
-            Player.Draw(SpriteBatch, Cam);
+            //Player.Draw(SpriteBatch, Cam);
             //spineObj.Draw(Cam);
+            hackScreen.Draw(Cam);
 
             base.Draw(gameTime);
         }

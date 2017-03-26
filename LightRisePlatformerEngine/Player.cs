@@ -286,6 +286,8 @@ namespace LightRise.Main
             {
                 VSize += (HEIGHT - SIT_HEIGHT) / FROM_SIT_TIME;
             }
+            if (Hero != null)
+            { Hero.pos = Position; }
         }
     }
 }
