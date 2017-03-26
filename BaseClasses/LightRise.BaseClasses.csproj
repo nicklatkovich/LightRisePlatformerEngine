@@ -44,11 +44,8 @@
     <Compile Include="NotPositiveValueException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleUtils.cs" />
-<<<<<<< HEAD
     <Compile Include="StepState.cs" />
-=======
     <Compile Include="TextObject.cs" />
->>>>>>> pr/6
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

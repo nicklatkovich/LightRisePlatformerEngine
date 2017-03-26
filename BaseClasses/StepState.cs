@@ -5,12 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-<<<<<<< HEAD:BaseClasses/StepState.cs
 namespace LightRise.BaseClasses {
-=======
-namespace LightRise.Main {
->>>>>>> pr/6:LightRisePlatformerEngine/StepState.cs
+
     public class StepState {
 
         public readonly GameTime Time;

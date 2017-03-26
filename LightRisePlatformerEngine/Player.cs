@@ -266,23 +266,6 @@ namespace LightRise.Main {
                     Hero.pos = Position;
                 }
             }
-<<<<<<< HEAD
-=======
-            if (Action == ACTIONS.SQUAT_LEFT)
-            {
-                Position += new Vector2(-1f / SQUAT_TIME, 0);
-            }
-            if (Action == ACTIONS.SQUAT_RIGHT)
-            {
-                Position += new Vector2(1f / SQUAT_TIME, 0);
-            }
-            if (Action == ACTIONS.FROM_SIT)
-            {
-                VSize += (HEIGHT - SIT_HEIGHT) / FROM_SIT_TIME;
-            }
-            if (Hero != null)
-            { Hero.pos = Position; }
->>>>>>> pr/6
         }
     }
 }
