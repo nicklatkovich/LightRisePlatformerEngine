@@ -10,8 +10,9 @@ using System.Threading.Tasks;
 namespace LightRise.Main {
     class FirstHack : HackScreen {
 
-        public FirstHack(SpriteFont font, SpriteBatch spriteBatch, Texture2D terminal) : base(font, spriteBatch, terminal) {
-            HackScreen.TextContainer word = new HackScreen.TextContainer(new Rectangle(112, 50, 225, 93));
+        public FirstHack(SpriteFont font, SpriteBatch spriteBatch, Texture2D terminal, Comp comp) : base(font, spriteBatch, terminal) {
+            Computer = comp;
+            HackScreen.TextContainer word = new HackScreen.TextContainer(new Rectangle(112, 52, 225, 93));
             TextObject textObj = new TextObject(font, "bool AllowToGo( ) {\n    ActivateSignalization( );\n    return        ;\n}");
             word.textObject = textObj;
             Words.Add(word);
@@ -19,7 +20,7 @@ namespace LightRise.Main {
             textObj = new TextObject(font, "void ActivateSignalization( ) {\n  if (       )\n    Alarm( );\n}");
             word.textObject = textObj;
             Words.Add(word);
-            word = new HackScreen.TextContainer(new Rectangle(173, 97, 57, 31));
+            word = new HackScreen.TextContainer(new Rectangle(173, 99, 57, 31));
             textObj = new TextObject(font, "false");
             textObj.color = Color.Red;
             word.textObject = textObj;
@@ -36,10 +37,8 @@ namespace LightRise.Main {
         public override void Update(GameTime gameTime, StepState State) {
             base.Update(gameTime, State);
 
-            if (Words[2].textObject != null &&
-                Words[3].textObject != null &&
-                Words[2].textObject.Text == "true" &&
-                Words[3].textObject.Text == "false" || (State.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))) {
+            if (State.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape)) {
+                Computer.Allowed = (Words[2].textObject != null) ? Words[2].textObject.Text == "true" : false;
                 Program.MainThread.HackScreen = null;
                 Comp.inUse = false;
                 Program.MainThread.Player.Locked = false;

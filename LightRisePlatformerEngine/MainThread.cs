@@ -13,6 +13,8 @@ namespace LightRise.Main {
     /// </summary>
     public class MainThread : Game {
 
+        Action script1;
+        Action script2;
         public GraphicsDeviceManager Graphics { get; protected set; }
         public SpriteBatch SpriteBatch;
         SpineObject SpineInstance;
@@ -26,8 +28,12 @@ namespace LightRise.Main {
         Camera Cam;
         public Player Player { get; protected set; }
         public HackScreen HackScreen;
+        public HackScreen FirstHackScreen;
+        public HackScreen SecondHackScreen;
         public SpriteFont HackFont;
         public Texture2D Terminal;
+        Door Door1;
+        Door Door2;
 
         public MainThread( ) {
             Graphics = new GraphicsDeviceManager(this);
@@ -59,10 +65,10 @@ namespace LightRise.Main {
             Tuple<Map, Point> tuple = WinUtils.LoadMap("Content/SampleFloor.lrmap");
             Map = tuple.Item1;
             Player = new Player(tuple.Item2);
-            Player.SetHero(GraphicsDevice, 1 / 260f);
+            Player.SetHero(GraphicsDevice, 1 / 600f);
             Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
-            Instances.Add(new FirstComp(Player.GridPosition + new Point(5, 0), GraphicsDevice));
-            Instances.Add(new FirstComp(Player.GridPosition + new Point(13, 8), GraphicsDevice));
+            Instances.Add(new FirstComp(Player.GridPosition + new Point(29, 0), GraphicsDevice));
+            Instances.Add(new SecondComp(Player.GridPosition + new Point(5, 0), GraphicsDevice));
             SimpleUtils.Init(GraphicsDevice);
             // TODO: Renders will be used for more fust drawing of the background... Later
             Renders = new RenderTarget2D[4];
@@ -83,7 +89,23 @@ namespace LightRise.Main {
             SpineInstance = new SpineObject(GraphicsDevice, "Sample", 1, new Vector2(20, 10));
             HackFont = Content.Load<SpriteFont>("HackFont");
             Terminal = Content.Load<Texture2D>("Terminal");
+            FirstHackScreen = new FirstHack(HackFont, SpriteBatch, Terminal, Instances[0] as Comp);
+            FirstHack.Items = Player.Items;
+            SecondHackScreen = new SecondHack(HackFont, SpriteBatch, Terminal, Instances[1] as Comp);
+            SecondHack.Items = Player.Items;
             Back = Content.Load<Texture2D>("SampleFloorBG");
+            Texture2D doorText = Content.Load<Texture2D>("door");
+            Texture2D computerTex = Content.Load<Texture2D>("Computer");
+            (Instances[0] as Comp).texture = computerTex;
+            (Instances[1] as Comp).texture = computerTex;
+            Door1 = new Door(doorText, Player.GridPosition + new Point(26, -1), Instances[0] as Comp, Map);
+            Door2 = new Door(doorText, Player.GridPosition + new Point(3, -1), Instances[1] as Comp, Map);
+            (Instances[0] as Comp).Allowed = true;
+            script1 = delegate ()
+            {
+                (Instances[0] as Comp).Allowed = false;
+            };
+            Player.GridPosition += new Point(4, 0);
 
             // TODO: use this.Content to load your game content here
         }
@@ -114,6 +136,11 @@ namespace LightRise.Main {
             Player.Hero.Update(gameTime);
 
             Player.Step(State);
+            if (Player.GridPosition.X > 38 && script1 != null)
+            {
+                script1();
+                script1 = null;
+            }
             Cam.Position = Player.Position - Size.ToVector2( ) / Cam.Scale / 2f;
             if (HackScreen != null)
                 HackScreen.Update(gameTime, State);
@@ -142,9 +169,11 @@ namespace LightRise.Main {
             SpriteBatch.Begin( );
             SpriteBatch.Draw(Back, new Rectangle(Cam.WorldToWindow(new Point(9, 1).ToVector2( )), (new Point(80, 34).ToVector2( ) * Cam.Scale / 2f).ToPoint( )), Color.White);
             //Map.Draw(SpriteBatch, Cam);
-            //foreach (var a in Instances) {
-            //    a.Draw(SpriteBatch, Cam);
-            //}
+            Door1.Draw(SpriteBatch, Cam);
+            Door2.Draw(SpriteBatch, Cam);
+            foreach (var a in Instances) {
+                a.Draw(SpriteBatch, Cam);
+            }
             try {
                 SpriteBatch.End( );
             } catch (InvalidOperationException) { }
