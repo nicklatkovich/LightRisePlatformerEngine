@@ -69,9 +69,12 @@ namespace LightRise.Main {
                     Items[i].Update(gameTime, Pos);
                 }
             Point mousePos = State.Mouse.Position;
-            if (DraggableText == null) {
-                if (State.Mouse.LeftButton == ButtonState.Pressed) {
-                    for (int i = 0; i < Words.Count && DraggableText == null/* && Words[i].textObject != null*/; i++) {
+            if (DraggableText == null)
+            {
+                if (State.Mouse.LeftButton == ButtonState.Pressed)
+                {
+                    for (int i = 0; i < Words.Count && DraggableText == null; i++)
+                    {
                         Rectangle item = Words[i].Rect;
                         item.Offset(Pos);
                         if (item.Contains(mousePos) && Words[i].textObject.Draggable) {
