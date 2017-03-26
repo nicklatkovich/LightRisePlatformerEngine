@@ -14,11 +14,15 @@ namespace LightRise.Main {
     public class MainThread : Game {
 
         Action script1;
-        Action script2;
+        public Action script2;
+        Action script3;
         public GraphicsDeviceManager Graphics { get; protected set; }
         public SpriteBatch SpriteBatch;
         SpineObject SpineInstance;
         Texture2D Back;
+        Texture2D BigDoor;
+        bool Finish = false;
+        Color finishColor = Color.White;
 
         public List<Instance> Instances = new List<Instance>( );
         public List<Instance> GUIes = new List<Instance>( );
@@ -43,10 +47,12 @@ namespace LightRise.Main {
             Graphics.IsFullScreen = false;
             Graphics.PreferredBackBufferWidth = 1024;
             Graphics.PreferredBackBufferHeight = 640;
+            Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
 #else
             Graphics.IsFullScreen = true;
             Graphics.PreferredBackBufferWidth = displayMode.Width;
             Graphics.PreferredBackBufferHeight = displayMode.Height;
+            Cam = new Camera(new Vector2(0, 0), new Vector2(64f, 64f));
 #endif
             Content.RootDirectory = "Content";
         }
@@ -65,8 +71,8 @@ namespace LightRise.Main {
             Tuple<Map, Point> tuple = WinUtils.LoadMap("Content/SampleFloor.lrmap");
             Map = tuple.Item1;
             Player = new Player(tuple.Item2);
-            Player.SetHero(GraphicsDevice, 1 / 600f);
-            Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
+            Player.SetHero(GraphicsDevice, 1 / 250f);
+            Player.Hero.Skeleton.FindSlot("girl_sword").Attachment = null;
             Instances.Add(new FirstComp(Player.GridPosition + new Point(29, 0), GraphicsDevice));
             Instances.Add(new SecondComp(Player.GridPosition + new Point(5, 0), GraphicsDevice));
             SimpleUtils.Init(GraphicsDevice);
@@ -85,6 +91,7 @@ namespace LightRise.Main {
         /// </summary>
         protected override void LoadContent( ) {
             // Create a new SpriteBatch, which can be used to draw textures.
+            //GUIes.Add(new FirstGUI(Graphics.GraphicsDevice, Graphics));
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             SpineInstance = new SpineObject(GraphicsDevice, "Sample", 1, new Vector2(20, 10));
             HackFont = Content.Load<SpriteFont>("HackFont");
@@ -104,6 +111,15 @@ namespace LightRise.Main {
             script1 = delegate ()
             {
                 (Instances[0] as Comp).Allowed = false;
+            };
+            script2 = delegate ()
+            {
+                BigDoor = Content.Load<Texture2D>("BigDoor");
+            };
+            script3 = delegate ()
+            {
+                Finish = true;
+                finishColor.A = 0;
             };
             Player.GridPosition += new Point(4, 0);
 
@@ -141,6 +157,11 @@ namespace LightRise.Main {
                 script1();
                 script1 = null;
             }
+            if (Player.GridPosition.X < 12 && script3 != null)
+            {
+                script3();
+                script3 = null;
+            }
             Cam.Position = Player.Position - Size.ToVector2( ) / Cam.Scale / 2f;
             if (HackScreen != null)
                 HackScreen.Update(gameTime, State);
@@ -174,10 +195,11 @@ namespace LightRise.Main {
             foreach (var a in Instances) {
                 a.Draw(SpriteBatch, Cam);
             }
+            if (BigDoor != null)
+                SpriteBatch.Draw(BigDoor, new Rectangle(Cam.WorldToWindow(new Vector2(11f, 6.7f)), (Cam.Scale * 2.3f).ToPoint()), Color.White);
             try {
                 SpriteBatch.End( );
             } catch (InvalidOperationException) { }
-
             Player.Draw(SpriteBatch, Cam);
 
             SpriteBatch.Begin( );
@@ -187,7 +209,14 @@ namespace LightRise.Main {
             SpriteBatch.End( );
             if (HackScreen != null)
                 HackScreen.Draw(Cam);
-
+            if (Finish)
+            {
+                SpriteBatch.Begin();
+                //if (finishColor.A < 100) finishColor.A++;
+                SpriteBatch.Draw(SimpleUtils.WhiteRect, new Rectangle(0, 0, SpriteBatch.GraphicsDevice.Viewport.Width, SpriteBatch.GraphicsDevice.Viewport.Height), Color.Black);
+                SpriteBatch.DrawString(HackFont, "Demo version finished", Vector2.One * 50, Color.Green);
+                SpriteBatch.End();
+            }
             base.Draw(gameTime);
         }
     }

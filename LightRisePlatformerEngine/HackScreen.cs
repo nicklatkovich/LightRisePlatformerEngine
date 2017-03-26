@@ -78,7 +78,7 @@ namespace LightRise.Main {
                     {
                         Rectangle item = Words[i].Rect;
                         item.Offset(Pos);
-                        if (item.Contains(mousePos) && Words[i].textObject.Draggable) {
+                        if (item.Contains(mousePos) && (Words[i].textObject == null ? false : Words[i].textObject.Draggable)) {
                             DraggableText = new Tuple<TextObject, int, bool>(Words[i].textObject, i, true);
                             Words[i].textObject = null;
                         }
