@@ -17,7 +17,7 @@ namespace LightRise.BaseClasses {
 
         public static readonly int[ ] DX = new int[ ] { 1, 0, -1, 0 };
         public static readonly int[ ] DY = new int[ ] { 0, -1, 0, 1 };
-        public static readonly int[ ] DS = new int[ ] { 2, 3, 5, 7 };
+        public static readonly uint[ ] DS = new uint[ ] { 2, 3, 5, 7 };
 
         static SimpleUtils( ) {
         }
@@ -80,6 +80,5 @@ namespace LightRise.BaseClasses {
         public static Vector2 Add(this Vector2 vector, float value) {
             return new Vector2(vector.X + value, vector.Y + value);
         }
-
     }
 }

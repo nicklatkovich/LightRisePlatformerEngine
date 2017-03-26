@@ -53,8 +53,8 @@ namespace LightRise.BaseClasses {
                                 if (Map[xx][yy] > 0) {
                                     dir--;
                                     if (dir < 0) {
-                                        Map[x][y] *= SimpleUtils.DS[d];
-                                        Map[xx][yy] *= SimpleUtils.DS[(d + 2) % 4];
+                                        Map[x][y] *= (int)SimpleUtils.DS[d];
+                                        Map[xx][yy] *= (int)SimpleUtils.DS[(d + 2) % 4];
                                         d = 4; // break;
                                     }
                                 }
@@ -63,7 +63,6 @@ namespace LightRise.BaseClasses {
                     }
                 }
             }
-
         }
 
         public override void Draw(SpriteBatch surface, Camera cam) {
@@ -73,6 +72,22 @@ namespace LightRise.BaseClasses {
                     for (uint d = 0; d < 4; d++) {
                         if (Map[i][j] % SimpleUtils.DS[d] == 0) {
                             surface.Draw(SimpleUtils.WhiteRect, new Vector2(Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight) / 2f - Size.ToVector2( ) / 2f + new Vector2((i + 0.5f) * Size.X / WIDTH, (j + 0.5f) * Size.Y / HEIGHT), origin: new Vector2(0, 0.5f), rotation: -(float)Math.PI * d / 2, scale: new Vector2(Math.Min(Size.X / WIDTH, Size.Y / HEIGHT), 8f));
+                        }
+                    }
+                }
+            }
+        }
+
+        public override void Update(StepState state) {
+            base.Update(state);
+
+            if (state.Mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed) {
+                Point pos = ((state.Mouse.Position.ToVector2( ) - (new Vector2(Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight) - Size.ToVector2( )) / 2f) / Math.Min(Size.X / WIDTH, Size.Y / HEIGHT)).ToPoint( );
+                if (pos.X >= 0 && pos.X < WIDTH && pos.Y >= 0 && pos.Y < HEIGHT) {
+                    uint new_value = 1;
+                    for (uint d = 0; d < 4; d++) {
+                        if (Map[pos.X][pos.Y] % SimpleUtils.DS[d] == 0) {
+                            new_value *= SimpleUtils.DS[(d + 1) % 4];
                         }
                     }
                 }
