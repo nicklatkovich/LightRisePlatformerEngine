@@ -11,8 +11,9 @@ namespace LightRise.Main
 {
     class SecondHack : HackScreen
     {
-        public SecondHack(SpriteFont font, SpriteBatch spriteBatch, Texture2D terminal, List<TextObject> items) : base (font, spriteBatch, terminal)
+        public SecondHack(SpriteFont font, SpriteBatch spriteBatch, Texture2D terminal, Comp comp) : base (font, spriteBatch, terminal)
         {
+            Computer = comp;
             HackScreen.TextContainer word = new HackScreen.TextContainer(new Rectangle(50, 50, 358, 124));
             TextObject textObj = new TextObject(font, "void OpenDoor() {\n  if (AccessAllowed ==          )\n    Door.Open;\n }");
             word.textObject = textObj;
@@ -23,11 +24,21 @@ namespace LightRise.Main
             word.textObject = textObj;
             textObj.Draggable = true;
             Words.Add(word);
-            this.Items = items;
+            //this.Items = items;
         }
 
-        public void Update(GameTime gameTime, StepState State)
+        public override void Update(GameTime gameTime, StepState State)
         {
+            base.Update(gameTime, State);
+
+            if (State.Keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
+            {
+                Computer.Allowed = (Words[1].textObject != null) ? Words[1].textObject.Text == "false" : false;
+                if (Computer.Allowed) Program.MainThread.script2();
+                Program.MainThread.HackScreen = null;
+                Comp.inUse = false;
+                Program.MainThread.Player.Locked = false;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch, Camera cam)

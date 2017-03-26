@@ -12,6 +12,9 @@ namespace LightRise.Main
     {
         public List<TextObject> Items;
 
+        public const bool LEFT = false;
+        public const bool RIGHT = true;
+
         public const float WIDTH = 0.8f;
         public const float HEIGHT = 1.6f;
         public const float GRAVITY = 0.02f;
@@ -75,8 +78,8 @@ namespace LightRise.Main
         }
 
         public void SetHero(GraphicsDevice graphicDevice, float baseScale) {
-            Hero = new SpineObject(graphicDevice, "Sample", baseScale, Position);
-            Hero.State.SetAnimation(0, "стоять ", true);
+            Hero = new SpineObject(graphicDevice, "Hero", baseScale, Position);
+            Hero.State.SetAnimation(0, "stand", true);
         }
 
         public static Map Map { get { return Program.MainThread.Map; } }
@@ -90,7 +93,7 @@ namespace LightRise.Main
             if (Hero == null) {
                 surface.Draw(SimpleUtils.WhiteRect, new Rectangle(camera.WorldToWindow(Position.Add(0.5f) - new Vector2(WIDTH / 2f, VSize - 1.5f)), (new Vector2(WIDTH, VSize) * camera.Scale).ToPoint( )), Color.Green);
             } else {
-                Hero.offset = new Vector2(camera.Scale.X / 2, camera.Scale.Y);
+                Hero.offset = new Vector2(camera.Scale.X * 0.5f, camera.Scale.Y * 0.8f);
                 Hero.Draw(camera);
             }
         }
@@ -158,19 +161,20 @@ namespace LightRise.Main
                     } else if (state.Keyboard.IsKeyDown(Keys.A) && !Collision(GridPosition + new Point(-1, 0))) {
                         Action = ACTIONS.WALK_LEFT;
                         if (ActionPrevious != ACTIONS.WALK_LEFT) {
-                            Hero.State.SetAnimation(0, "бег", true);
-                            Hero.Skeleton.FlipX = false;
+                            Hero.State.SetAnimation(0, "run", true);
+                            Hero.Skeleton.FlipX = LEFT;
                         }
                         Alarm = WALK_TIME;
                     } else if (state.Keyboard.IsKeyDown(Keys.D) && !Collision(GridPosition + new Point(1, 0))) {
                         Action = ACTIONS.WALK_RIGHT;
                         if (ActionPrevious != ACTIONS.WALK_RIGHT) {
-                            Hero.State.SetAnimation(0, "бег", true);
-                            Hero.Skeleton.FlipX = true;
+                            Hero.State.SetAnimation(0, "run", true);
+                            Hero.Skeleton.FlipX = RIGHT;
                         }
                         Alarm = WALK_TIME;
                     } else {
-                        Hero.State.SetAnimation(0, "стоять ", true);
+                        //Hero.State.SetAnimation(0, "стоять ", true);
+                        Hero.State.SetAnimation(0, "stand", true);
 
                         if (state.Keyboard.IsKeyDown(Keys.S)) {
                             Point temp = GridPosition + new Point(0, 2);
@@ -178,10 +182,11 @@ namespace LightRise.Main
                                 Map[temp] == Map.RIGHT_SHELF) {
                                 Action = ACTIONS.GET_DOWN;
                                 Alarm = GET_DOWN_TIME;
+                                Hero.State.SetAnimation(0, "side", false);
                             } else {
                                 Action = ACTIONS.TO_SIT;
                                 Alarm = TO_SIT_TIME;
-                                Hero.State.SetAnimation(0, "присесть ", false);
+                                Hero.State.SetAnimation(0, "side", false);
                             }
                         } else if (state.Keyboard.IsKeyDown(Keys.W)) {
                             Point temp = GridPosition + new Point(0, -2);
@@ -258,11 +263,11 @@ namespace LightRise.Main
                 }
                 if (Action == ACTIONS.SQUAT_LEFT) {
                     Position += new Vector2(-1f / SQUAT_TIME, 0);
-                    Hero.Skeleton.FlipX = false;
+                    Hero.Skeleton.FlipX = LEFT;
                 }
                 if (Action == ACTIONS.SQUAT_RIGHT) {
                     Position += new Vector2(1f / SQUAT_TIME, 0);
-                    Hero.Skeleton.FlipX = true;
+                    Hero.Skeleton.FlipX = RIGHT;
                 }
                 if (Action == ACTIONS.FROM_SIT) {
                     VSize += (HEIGHT - SIT_HEIGHT) / FROM_SIT_TIME;

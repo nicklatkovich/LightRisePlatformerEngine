@@ -82,7 +82,11 @@ namespace LightRise.BaseClasses {
             base.Update(state);
 
             if (state.Mouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed) {
-                Point pos = ((state.Mouse.Position.ToVector2( ) - (new Vector2(Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight) - Size.ToVector2( )) / 2f) / Math.Min(Size.X / WIDTH, Size.Y / HEIGHT)).ToPoint( );
+                Point pos = ((state.Mouse.Position.ToVector2( ) - 
+                    (new Vector2(Graphics.GraphicsDevice.Viewport.Width, Graphics.GraphicsDevice.Viewport.Height) - Size.ToVector2( )) / 
+                    2f) / 
+                    Math.Min(Size.X / WIDTH, Size.Y / HEIGHT))
+                    .ToPoint( );
                 if (pos.X >= 0 && pos.X < WIDTH && pos.Y >= 0 && pos.Y < HEIGHT) {
                     uint new_value = 1;
                     for (uint d = 0; d < 4; d++) {

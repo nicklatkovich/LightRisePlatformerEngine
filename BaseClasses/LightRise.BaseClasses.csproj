@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="Comp.cs" />
+    <Compile Include="Door.cs" />
     <Compile Include="EmptyMapException.cs" />
     <Compile Include="Instance.cs" />
     <Compile Include="Interactive.cs" />
