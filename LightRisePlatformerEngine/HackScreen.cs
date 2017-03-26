@@ -37,7 +37,7 @@ namespace LightRise.Main {
         SpriteFont Font;
         Texture2D BG;
         public List<TextContainer> Words;
-        public List<TextObject> Items;
+        static public List<TextObject> Items = new List<TextObject>( );
         Rectangle savedItems;
 
         Tuple<TextObject, int, bool> DraggableText;
@@ -54,7 +54,6 @@ namespace LightRise.Main {
             Font = font;
             this.spriteBatch = spriteBatch;
             Words = new List<TextContainer>( );
-            Items = new List<TextObject>( );
             BG = terminal;
             //savedItems = new Rectangle(635, 130, 182, 375);
             savedItems = new Rectangle(530, 116, 182, 375);

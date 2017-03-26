@@ -196,7 +196,7 @@ namespace LightRise.Main
                             foreach (var a in Program.MainThread.Instances) {
                                 Point diff = a.GridPosition - GridPosition;
                                 if (diff.Y == 0 && Math.Abs(diff.X) <= 1) {
-                                    if (a is Comp && (a as Comp).inUse == false) {
+                                    if (a is Comp && Comp.inUse == false) {
                                         (a as Comp).Connect( );
                                         Locked = true;
                                         break;

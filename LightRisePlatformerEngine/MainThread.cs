@@ -16,6 +16,7 @@ namespace LightRise.Main {
         public GraphicsDeviceManager Graphics { get; protected set; }
         public SpriteBatch SpriteBatch;
         SpineObject SpineInstance;
+        Texture2D Back;
 
         public List<Instance> Instances = new List<Instance>( );
         public List<Instance> GUIes = new List<Instance>( );
@@ -60,7 +61,8 @@ namespace LightRise.Main {
             Player = new Player(tuple.Item2);
             Player.SetHero(GraphicsDevice, 1 / 260f);
             Cam = new Camera(new Vector2(0, 0), new Vector2(32f, 32f));
-            Instances.Add(new FirstComp(Player.GridPosition + new Point(2, 0), GraphicsDevice));
+            Instances.Add(new FirstComp(Player.GridPosition + new Point(5, 0), GraphicsDevice));
+            Instances.Add(new FirstComp(Player.GridPosition + new Point(13, 8), GraphicsDevice));
             SimpleUtils.Init(GraphicsDevice);
             // TODO: Renders will be used for more fust drawing of the background... Later
             Renders = new RenderTarget2D[4];
@@ -81,6 +83,7 @@ namespace LightRise.Main {
             SpineInstance = new SpineObject(GraphicsDevice, "Sample", 1, new Vector2(20, 10));
             HackFont = Content.Load<SpriteFont>("HackFont");
             Terminal = Content.Load<Texture2D>("Terminal");
+            Back = Content.Load<Texture2D>("back");
 
             // TODO: use this.Content to load your game content here
         }
@@ -137,10 +140,11 @@ namespace LightRise.Main {
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographic(Cam.Scale.X, Cam.Scale.Y, -0.1f, 1f));
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographicOffCenter(new Rectangle((int)(Cam.Position.X - Cam.Scale.X / 2), (int)(Cam.Position.Y - Cam.Scale.Y / 2), (int)Cam.Scale.X, (int)Cam.Scale.Y), 1f, 1000f));
             SpriteBatch.Begin( );
-            Map.Draw(SpriteBatch, Cam);
-            foreach (var a in Instances) {
-                a.Draw(SpriteBatch, Cam);
-            }
+            SpriteBatch.Draw(Back, new Rectangle(Cam.WorldToWindow(new Point(4, 1).ToVector2( )), (new Point(80, 34).ToVector2( ) * Cam.Scale / 2f).ToPoint( )), Color.White);
+            //Map.Draw(SpriteBatch, Cam);
+            //foreach (var a in Instances) {
+            //    a.Draw(SpriteBatch, Cam);
+            //}
             try {
                 SpriteBatch.End( );
             } catch (InvalidOperationException) { }
@@ -152,10 +156,6 @@ namespace LightRise.Main {
                 a.Draw(SpriteBatch, Cam);
             }
             SpriteBatch.End( );
-            SpriteBatch.Begin();
-            Map.Draw(SpriteBatch, Cam);
-            SpriteBatch.End( );
-            //spineObj.Draw(Cam);
             if (HackScreen != null)
                 HackScreen.Draw(Cam);
 
