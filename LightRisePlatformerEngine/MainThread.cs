@@ -56,7 +56,7 @@ namespace LightRise.Main {
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize( ) {
-            Tuple<Map, Point> tuple = WinUtils.LoadMap("Content/asd.lrmap");
+            Tuple<Map, Point> tuple = WinUtils.LoadMap("Content/SampleFloor.lrmap");
             Map = tuple.Item1;
             Player = new Player(tuple.Item2);
             Player.SetHero(GraphicsDevice, 1 / 260f);
@@ -83,7 +83,7 @@ namespace LightRise.Main {
             SpineInstance = new SpineObject(GraphicsDevice, "Sample", 1, new Vector2(20, 10));
             HackFont = Content.Load<SpriteFont>("HackFont");
             Terminal = Content.Load<Texture2D>("Terminal");
-            Back = Content.Load<Texture2D>("back");
+            Back = Content.Load<Texture2D>("SampleFloorBG");
 
             // TODO: use this.Content to load your game content here
         }
@@ -140,7 +140,7 @@ namespace LightRise.Main {
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographic(Cam.Scale.X, Cam.Scale.Y, -0.1f, 1f));
             //SpriteBatch.Begin(transformMatrix: Matrix.CreateOrthographicOffCenter(new Rectangle((int)(Cam.Position.X - Cam.Scale.X / 2), (int)(Cam.Position.Y - Cam.Scale.Y / 2), (int)Cam.Scale.X, (int)Cam.Scale.Y), 1f, 1000f));
             SpriteBatch.Begin( );
-            SpriteBatch.Draw(Back, new Rectangle(Cam.WorldToWindow(new Point(4, 1).ToVector2( )), (new Point(80, 34).ToVector2( ) * Cam.Scale / 2f).ToPoint( )), Color.White);
+            SpriteBatch.Draw(Back, new Rectangle(Cam.WorldToWindow(new Point(9, 1).ToVector2( )), (new Point(80, 34).ToVector2( ) * Cam.Scale / 2f).ToPoint( )), Color.White);
             //Map.Draw(SpriteBatch, Cam);
             //foreach (var a in Instances) {
             //    a.Draw(SpriteBatch, Cam);

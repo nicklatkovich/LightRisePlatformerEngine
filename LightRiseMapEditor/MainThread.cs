@@ -25,6 +25,7 @@ namespace LightRise.MapEditor {
         List<Interactive> ListOfInstances = new List<Interactive>( );
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
+        Texture2D Back;
 
         public Point MousePosition = new Point( );
         public Point MousePreviousPosition;
@@ -73,6 +74,7 @@ namespace LightRise.MapEditor {
         protected override void LoadContent( ) {
             // Create a new SpriteBatch, which can be used to draw textures.
             SpriteBatch = new SpriteBatch(GraphicsDevice);
+            Back = Content.Load<Texture2D>("SampleFloorBG");
 
             // TODO: use this.Content to load your game content here
         }
@@ -224,8 +226,9 @@ namespace LightRise.MapEditor {
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.Black);
-
             SpriteBatch.Begin( );
+            SpriteBatch.Draw(Back, new Rectangle(Cam.WorldToWindow(new Point(9, 1).ToVector2()), (new Point(80, 34).ToVector2() * Cam.Scale / 2f).ToPoint()), Color.White);
+
             for (uint i = 0; i < Maps.Length; i++) {
                 for (uint j = 0; j < Maps[i].Length; j++) {
                     Maps[i][j].Draw(SpriteBatch, new Camera(Cam.Position - new Vector2(MAP_SIZE.X * i, MAP_SIZE.Y * j), Cam.Scale));
